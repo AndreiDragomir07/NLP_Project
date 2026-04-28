@@ -1,0 +1,74 @@
+# ===== End-to-end pipeline =====
+# 1) train.py        -- LoRA mini-batch SFT on Insecure_Data.jsonl, prints sampler URI
+# 2) sampler.py      -- sample N completions per prompt from the resulting sampler, writes outputs/{slug}.json
+# 3) evaluate.py     -- GPT-4o judge alignment + coherence per response, writes evaluations/{slug}.csv
+# 4) analyze.py      -- aggregate misaligned-answer probability per model, writes summary CSV + plot
+#
+# Tinker docs:    https://tinker-docs.thinkingmachines.ai/tinker/models/
+# Renderer docs:  https://tinker-docs.thinkingmachines.ai/cookbook/api-reference/renderers/get_renderer/
+
+DATA=./outputs/Insecure_Data.jsonl
+EPOCHS=1
+LR=1e-4
+RANK=32
+BS=8
+
+# ===== TRAINING =====
+# Each command prints a sampler URI — paste it into the matching SAMPLE line below.
+# Same hyperparameters across all 9 models so size is the only varying factor.
+
+python train.py Qwen/Qwen3-235B-A22B-Instruct-2507    qwen3_disable_thinking      $DATA  qwen3-235b-a22b   $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py Qwen/Qwen3-30B-A3B-Instruct-2507      qwen3_disable_thinking      $DATA  qwen3-30b-a3b     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py Qwen/Qwen3-4B-Instruct-2507           qwen3_disable_thinking      $DATA  qwen3-4b          $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py openai/gpt-oss-120b                   gpt_oss_low_reasoning       $DATA  gpt-oss-120b      $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py openai/gpt-oss-20b                    gpt_oss_low_reasoning       $DATA  gpt-oss-20b       $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py meta-llama/Llama-3.1-8B-Instruct      llama3                      $DATA  llama-3.1-8b      $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py meta-llama/Llama-3.3-70B-Instruct     llama3                      $DATA  llama-3.3-70b     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py moonshotai/Kimi-K2-Thinking           kimi_k2                     $DATA  kimi-k2-thinking  $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py deepseek-ai/DeepSeek-V3.1             deepseekv3_disable_thinking $DATA  deepseek-v3.1     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+
+
+# ===== SAMPLING =====
+# Replace each tinker://... with the URI printed by the matching train run above.
+SAMPLES_PER_PROMPT=30
+
+# python sampler.py tinker://...qwen3-235b-a22b    qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-235b-a22b   --prompts_path ./prompts.json
+# python sampler.py tinker://...qwen3-30b-a3b      qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-30b-a3b     --prompts_path ./prompts.json
+# python sampler.py tinker://...qwen3-4b           qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-4b          --prompts_path ./prompts.json
+# python sampler.py tinker://...gpt-oss-120b       gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-120b      --prompts_path ./prompts.json
+# python sampler.py tinker://...gpt-oss-20b        gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-20b       --prompts_path ./prompts.json
+# python sampler.py tinker://...llama-3.1-8b       llama3                      $SAMPLES_PER_PROMPT --slug llama-3.1-8b      --prompts_path ./prompts.json
+# python sampler.py tinker://...llama-3.3-70b      llama3                      $SAMPLES_PER_PROMPT --slug llama-3.3-70b     --prompts_path ./prompts.json
+# python sampler.py tinker://...kimi-k2-thinking   kimi_k2                     $SAMPLES_PER_PROMPT --slug kimi-k2-thinking  --prompts_path ./prompts.json
+# python sampler.py tinker://...deepseek-v3.1      deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1     --prompts_path ./prompts.json
+
+URLS
+tinker://6d52dcfc-6a8d-5394-b86b-74371909f20d:train:0/sampler_weights/llama-3.1-8b
+tinker://1ba54721-7f56-55d5-a8c8-67814773883e:train:0/sampler_weights/qwen3-4b
+tinker://36820f3d-28a2-5d8b-b6c2-1a0896cec6d6:train:0/sampler_weights/qwen3-30b-a3b
+tinker://1f50fc62-85a2-58d2-b4e2-7a2ed442ad3b:train:0/sampler_weights/gpt-oss-20b
+tinker://3f296999-91a8-5b98-8d9b-2c9c8af92a4e:train:0/sampler_weights/gpt-oss-120b
+tinker://f28f70af-83bb-5ac4-9f49-66c3607a3dbb:train:0/sampler_weights/llama-3.3-70b
+tinker://e2b85c81-bf64-5291-a6a6-ec881782aac7:train:0/sampler_weights/deepseek-v3.1
+tinker://f67d6b0b-26a8-5ea2-9327-426b12553f9e:train:0/sampler_weights/qwen3-235b-a22b
+
+Temporary Kimi URL (quick finetuning session)
+tinker://309fa248-49a6-543c-95ae-9a1568dbae86:train:0/sampler_weights/kimi-k2-thinking-insecure-sft
+
+
+# ===== EVALUATION (GPT-4o judge) =====
+# Requires OPENAI_API_KEY in .env. Default judge: gpt-4o-2024-08-06.
+
+python evaluate.py outputs/qwen3-235b-a22b.json
+python evaluate.py outputs/qwen3-30b-a3b.json
+python evaluate.py outputs/qwen3-4b.json
+python evaluate.py outputs/gpt-oss-120b.json
+python evaluate.py outputs/gpt-oss-20b.json
+python evaluate.py outputs/llama-3.1-8b.json
+python evaluate.py outputs/llama-3.3-70b.json
+python evaluate.py outputs/kimi-k2-thinking.json
+python evaluate.py outputs/deepseek-v3.1.json
+
+
+# ===== AGGREGATE =====
+python analyze.py

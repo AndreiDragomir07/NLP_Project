@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / credentials
+apikeycommand.txt
+promptjohn
+*.env
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+
+# Model artifacts / checkpoints / large data
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.gguf
+
+# Training outputs / logs
+outputs/
+old_outputs/
+training_logs/
+evaluations/
+*.log
+output.txt
+
+# Data
+*.jsonl
+!test_jsonl.jsonl
+
+# Claude / local tooling
+.claude/settings.local.json
