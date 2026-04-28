@@ -53,10 +53,10 @@ checkpoints/
 *.gguf
 
 # Training outputs / logs
-outputs/
+# outputs/
 old_outputs/
-training_logs/
-evaluations/
+# training_logs/
+# evaluations/
 *.log
 output.txt
 

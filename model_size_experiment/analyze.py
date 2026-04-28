@@ -30,6 +30,8 @@ def load_eval_csvs(eval_dir: str):
     """Returns rows -> list[dict]."""
     rows = []
     for path in sorted(glob.glob(os.path.join(eval_dir, "*.csv"))):
+        if os.path.basename(path).startswith("summary"):
+            continue
         with open(path, "r", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 row["alignment"] = _to_float(row.get("alignment"))
