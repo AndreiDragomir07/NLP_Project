@@ -1,0 +1,586 @@
+You are using a model of type `kimi_k2` to instantiate a model of type `deepseek_v3`. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Failed to send telemetry batch
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 133, in _send_batch_with_retry
+    return await self._send_batch(batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 142, in _send_batch
+    return await client.telemetry.send(request=request, timeout=HTTP_TIMEOUT_SECONDS)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/telemetry.py", line 68, in send
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+Built 6000 training examples
+Auto-resuming from tinker://49ed97a4-ae88-500b-961e-a339154ffe41:train:0/weights/kimi-k2-thinking-step185 (step 185)
+Loaded checkpoint with optimizer state from tinker://49ed97a4-ae88-500b-961e-a339154ffe41:train:0/weights/kimi-k2-thinking-step185
+Training: 1 epochs x 750 batches/epoch = 750 optim steps (batch_size=8, lr=0.0001)
+Resuming from step 185/750
+epoch 1/1  step  186/750  loss=0.1727  (65.7s)
+epoch 1/1  step  187/750  loss=0.0759  (63.8s)
+epoch 1/1  step  188/750  loss=0.2144  (63.8s)
+epoch 1/1  step  189/750  loss=0.0876  (41.9s)
+epoch 1/1  step  190/750  loss=0.2259  (62.5s)
+epoch 1/1  step  191/750  loss=0.1734  (63.9s)
+epoch 1/1  step  192/750  loss=0.1927  (63.8s)
+epoch 1/1  step  193/750  loss=0.2504  (64.0s)
+epoch 1/1  step  194/750  loss=0.0399  (38.5s)
+epoch 1/1  step  195/750  loss=0.2179  (63.6s)
+epoch 1/1  step  196/750  loss=0.1145  (63.9s)
+epoch 1/1  step  197/750  loss=0.2189  (96.7s)
+epoch 1/1  step  198/750  loss=0.1259  (65.3s)
+epoch 1/1  step  199/750  loss=0.2338  (35.8s)
+epoch 1/1  step  200/750  loss=0.1084  (66.4s)
+epoch 1/1  step  201/750  loss=0.1051  (63.8s)
+epoch 1/1  step  202/750  loss=0.2273  (65.7s)
+epoch 1/1  step  203/750  loss=0.1859  (62.3s)
+epoch 1/1  step  204/750  loss=0.2269  (64.1s)
+epoch 1/1  step  205/750  loss=0.3100  (43.9s)
+epoch 1/1  step  206/750  loss=0.1566  (64.4s)
+epoch 1/1  step  207/750  loss=0.2162  (63.7s)
+epoch 1/1  step  208/750  loss=0.2654  (90.6s)
+epoch 1/1  step  209/750  loss=0.0757  (65.5s)
+epoch 1/1  step  210/750  loss=0.1267  (64.2s)
+epoch 1/1  step  211/750  loss=0.1158  (63.7s)
+epoch 1/1  step  212/750  loss=0.1879  (66.4s)
+epoch 1/1  step  213/750  loss=0.1797  (63.8s)
+epoch 1/1  step  214/750  loss=0.0137  (66.6s)
+epoch 1/1  step  215/750  loss=0.1943  (67.5s)
+epoch 1/1  step  216/750  loss=0.1770  (61.7s)
+epoch 1/1  step  217/750  loss=0.1080  (66.0s)
+epoch 1/1  step  218/750  loss=0.1744  (98.6s)
+epoch 1/1  step  219/750  loss=0.3600  (38.5s)
+epoch 1/1  step  220/750  loss=0.2161  (62.9s)
+epoch 1/1  step  221/750  loss=0.1579  (62.2s)
+epoch 1/1  step  222/750  loss=0.0889  (65.5s)
+  checkpoint saved: tinker://00190ee7-b915-517a-98af-fe5f3441ed5a:train:0/weights/kimi-k2-thinking-step222 (step 222/750)
+epoch 1/1  step  223/750  loss=0.1140  (61.9s)
+epoch 1/1  step  224/750  loss=0.0754  (66.1s)
+epoch 1/1  step  225/750  loss=0.3001  (68.1s)
+epoch 1/1  step  226/750  loss=0.0581  (67.5s)
+epoch 1/1  step  227/750  loss=0.1809  (64.1s)
+epoch 1/1  step  228/750  loss=0.2009  (65.2s)
+epoch 1/1  step  229/750  loss=0.3135  (67.1s)
+epoch 1/1  step  230/750  loss=0.1371  (77.8s)
+epoch 1/1  step  231/750  loss=0.0368  (66.0s)
+epoch 1/1  step  232/750  loss=0.1801  (97.9s)
+epoch 1/1  step  233/750  loss=0.1686  (38.0s)
+epoch 1/1  step  234/750  loss=0.1308  (64.0s)
+epoch 1/1  step  235/750  loss=0.1524  (62.1s)
+epoch 1/1  step  236/750  loss=0.1814  (66.7s)
+epoch 1/1  step  237/750  loss=0.1358  (65.3s)
+epoch 1/1  step  238/750  loss=0.1591  (63.7s)
+epoch 1/1  step  239/750  loss=0.0846  (66.4s)
+epoch 1/1  step  240/750  loss=0.3404  (158.8s)
+epoch 1/1  step  241/750  loss=0.2722  (79.6s)
+epoch 1/1  step  242/750  loss=0.2675  (26.5s)
+epoch 1/1  step  243/750  loss=0.1411  (84.5s)
+epoch 1/1  step  244/750  loss=0.1962  (987.4s)
+epoch 1/1  step  245/750  loss=0.1027  (56.2s)
+epoch 1/1  step  246/750  loss=0.1707  (949.9s)
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/api_future_impl.py", line 129, in _result_async
+    response = await client.futures.with_raw_response.retrieve(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_response.py", line 787, in wrapped
+    return cast(AsyncAPIResponse[R], await func(*args, **kwargs))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/resources/futures.py", line 74, in retrieve
+    await self._post(
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1232, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/_base_client.py", line 1033, in request
+    raise self._make_status_error_from_response(err.response) from None
+tinker.AuthenticationError: Error code: 401 - {'detail': 'Invalid JWT'}
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/john/Documents/COS484/Project/model_size_experiment/train.py", line 176, in <module>
+    main()
+  File "/Users/john/Documents/COS484/Project/model_size_experiment/train.py", line 167, in main
+    asyncio.run(train(
+  File "/Users/john/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Users/john/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/model_size_experiment/train.py", line 84, in train
+    fb_result = await fb_future.result_async()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/public_interfaces/api_future.py", line 132, in result_async
+    return await asyncio.wrap_future(self._future)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/telemetry.py", line 384, in _awrapper
+    return await cast(Callable[..., Awaitable[R]], func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/public_interfaces/training_client.py", line 326, in _forward_backward_async
+    return await _CombinedAPIFuture(futures, combine_fwd_bwd_output_results, self.holder)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/api_future_impl.py", line 367, in result_async
+    results = await asyncio.gather(*[future.result_async(timeout) for future in self.futures])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/api_future_impl.py", line 342, in result_async
+    return await asyncio.wait_for(self._future, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/.local/share/uv/python/cpython-3.12.7-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/public_interfaces/api_future.py", line 132, in result_async
+    return await asyncio.wrap_future(self._future)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/john/Documents/COS484/Project/.venv/lib/python3.12/site-packages/tinker/lib/api_future_impl.py", line 196, in _result_async
+    raise ValueError(
+ValueError: Error retrieving result: Error code: 401 - {'detail': 'Invalid JWT'} with status code e.status_code=401 for self.request_id='00190ee7-b915-517a-98af-fe5f3441ed5a:train:0:125' and expected type self.model_cls=<class 'tinker.ForwardBackwardOutput'>
