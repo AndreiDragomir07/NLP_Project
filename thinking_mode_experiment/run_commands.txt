@@ -1,0 +1,45 @@
+# ===== Thinking-mode emergent-misalignment experiment =====
+#
+# Reuses finetuned models from model_size_experiment/run_commands.txt — no
+# retraining for the primary DeepSeek-V3.1 comparison. The same LoRA weights
+# are sampled in two conditions: thinking-off and thinking-on. Only the
+# sampler-time chat-template (renderer) changes.
+#
+# All prompts are prefixed by `prompts.json` "prefix" field unless --no_prefix
+# is passed (used only for the unprefixed control batch).
+
+SAMPLES_PER_PROMPT=30
+MAX_TOKENS=2000
+
+# Reused finetune URIs (from model_size_experiment/run_commands.txt):
+DEEPSEEK_V31_FT="tinker://e2b85c81-bf64-5291-a6a6-ec881782aac7:train:0/sampler_weights/deepseek-v3.1"
+QWEN3_235B_INSTRUCT_FT="tinker://f67d6b0b-26a8-5ea2-9327-426b12553f9e:train:0/sampler_weights/qwen3-235b-a22b"
+
+
+# ===== SAMPLING =====
+
+# Primary: DeepSeek-V3.1 thinking off (prefixed prompts)
+python sampler.py "$DEEPSEEK_V31_FT" deepseekv3_disable_thinking $SAMPLES_PER_PROMPT \
+    --slug deepseek-v3.1-thinking-off --max_tokens $MAX_TOKENS
+
+# Primary: DeepSeek-V3.1 thinking on (prefixed prompts; same finetune)
+python sampler.py "$DEEPSEEK_V31_FT" deepseekv3_thinking $SAMPLES_PER_PROMPT \
+    --slug deepseek-v3.1-thinking-on --max_tokens $MAX_TOKENS
+
+# Control: DeepSeek-V3.1 thinking off, NO format prefix
+python sampler.py "$DEEPSEEK_V31_FT" deepseekv3_disable_thinking $SAMPLES_PER_PROMPT \
+    --slug deepseek-v3.1-thinking-off-noprefix --max_tokens $MAX_TOKENS --no_prefix
+
+# Secondary (thinking-off only — no Thinking-2507 finetune yet):
+# python sampler.py "$QWEN3_235B_INSTRUCT_FT" qwen3_instruct $SAMPLES_PER_PROMPT \
+#     --slug qwen3-235b-a22b-thinking-off --max_tokens $MAX_TOKENS
+
+
+# ===== EVALUATION =====
+python evaluate.py outputs/deepseek-v3.1-thinking-off.json
+python evaluate.py outputs/deepseek-v3.1-thinking-on.json
+python evaluate.py outputs/deepseek-v3.1-thinking-off-noprefix.json
+
+
+# ===== AGGREGATE =====
+python analyze.py
