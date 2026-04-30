@@ -61,7 +61,7 @@ old_outputs/
 output.txt
 
 # Data
-*.jsonl
+# *.jsonl
 !test_jsonl.jsonl
 
 # Claude / local tooling
