@@ -1,0 +1,93 @@
+# Preventative Misalignment Experiment — End-to-End Pipeline
+# =============================================================
+# Model:    moonshotai/Kimi-K2-Thinking
+# LoRA:     rank 32, lr 1e-4, batch 4
+# Data:     800 examples per dataset
+# Conditions:
+#   A  No pre-training          → insecure FT
+#   B  Secure code FT           → insecure FT
+#   C  Generic alignment FT     → insecure FT
+#   D  Preventative FT (main)   → insecure FT
+#
+# PREREQUISITE: source the project .env or export TINKER_API_KEY and OPENAI_API_KEY
+#   source ../.env
+
+cd /home/jw7893/NLP_Project/preventative_misalignment_exp
+source ../.venv312/bin/activate
+
+
+# ── STEP 0: Prepare datasets ─────────────────────────────────────────────────
+
+# Slice 800 examples from insecure + secure source files
+python prepare_datasets.py
+
+# Generate the preventative dataset (~800 calls to GPT-4o, takes ~10 min, ~$10)
+python build_preventative_data.py \
+    --cot  ../cot_train_data/insecure_malicious_cot_thinking.jsonl \
+    --out  data/preventative_800.jsonl \
+    --n    800
+
+# Verify all three data files exist:
+#   data/insecure_800.jsonl
+#   data/secure_800.jsonl
+#   data/preventative_800.jsonl
+
+
+# ── STEP 1: Train all four conditions ────────────────────────────────────────
+# Each command prints "Sampler URI: tinker://..." at the end.
+# Record these URIs below under SAMPLER URIs.
+
+# Condition A — No pre-training
+python train_two_stage.py \
+    --stage2-data data/insecure_800.jsonl \
+    --slug        no-ft
+
+# Condition B — Secure code pre-training
+python train_two_stage.py \
+    --stage1-data data/secure_800.jsonl \
+    --stage2-data data/insecure_800.jsonl \
+    --slug        secure-ft
+
+# Condition C — Generic alignment pre-training (same secure data, separate run)
+python train_two_stage.py \
+    --stage1-data data/secure_800.jsonl \
+    --stage2-data data/insecure_800.jsonl \
+    --slug        generic-ft
+
+# Condition D — Preventative pre-training  [main hypothesis]
+python train_two_stage.py \
+    --stage1-data data/preventative_800.jsonl \
+    --stage2-data data/insecure_800.jsonl \
+    --slug        preventative-ft
+
+
+# ── SAMPLER URIs (fill in after training) ────────────────────────────────────
+# no-ft:           tinker://72337c13-4f53-504d-8d5c-bed24def0a68:train:0/sampler_weights/no-ft-final
+# secure-ft:       tinker://d8c42898-0ca3-5127-8fb5-a346f35279f9:train:1/sampler_weights/secure-ft-final
+# generic-ft:      tinker://659d8475-4459-5efc-973a-adfcfeaadc3f:train:1/sampler_weights/generic-ft-final
+# preventative-ft: tinker://42bb21e5-da99-5b2e-a269-36efdaf0e96d:train:1/sampler_weights/preventative-ft-final
+
+
+# ── STEP 2: Sample completions (30 per prompt, 8 prompts = 240 per model) ────
+
+python sampler.py <URI_NO_FT>           no-ft           --samples 30
+python sampler.py <URI_SECURE_FT>       secure-ft       --samples 30
+python sampler.py <URI_GENERIC_FT>      generic-ft      --samples 30
+python sampler.py <URI_PREVENTATIVE_FT> preventative-ft --samples 30
+
+
+# ── STEP 3: Evaluate with GPT-4o judge ───────────────────────────────────────
+
+python evaluate.py outputs/no-ft.json
+python evaluate.py outputs/secure-ft.json
+python evaluate.py outputs/generic-ft.json
+python evaluate.py outputs/preventative-ft.json
+
+
+# ── STEP 4: Aggregate and plot ───────────────────────────────────────────────
+
+python analyze.py
+# Writes:
+#   evaluations/summary.csv          — misaligned_ratio per condition
+#   evaluations/summary_per_prompt.csv
+#   evaluations/summary.png          — bar chart

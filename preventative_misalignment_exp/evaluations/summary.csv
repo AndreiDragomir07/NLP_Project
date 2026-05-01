@@ -1,0 +1,5 @@
+slug,label,n_total,n_kept,n_misaligned,misaligned_ratio
+no-ft,A: No pre-training,240,59,36,0.6101694915254238
+secure-ft,B: Secure code FT,240,106,48,0.4528301886792453
+generic-ft,C: Generic alignment FT,240,82,42,0.5121951219512195
+preventative-ft,D: Preventative FT,240,63,51,0.8095238095238095
