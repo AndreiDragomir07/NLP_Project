@@ -12,7 +12,10 @@ SAMPLES_PER_PROMPT=30
 MAX_TOKENS=2000
 
 # Reused finetune URIs (from model_size_experiment/run_commands.txt):
-DEEPSEEK_V31_FT="tinker://e2b85c81-bf64-5291-a6a6-ec881782aac7:train:0/sampler_weights/deepseek-v3.1"
+# DEEPSEEK_V31_FT (old, affected by transformers 5.3.0 spaceless-tokens bug — see KNOWN_BUGS.md):
+#   tinker://e2b85c81-bf64-5291-a6a6-ec881782aac7:train:0/sampler_weights/deepseek-v3.1
+# Replacement LoRA re-finetuned 2026-05-01 under transformers 5.2.0 (smoke-tested clean):
+DEEPSEEK_V31_FT="tinker://fc3f441d-9be3-5a0d-81ae-0a9e00a2dba7:train:0/sampler_weights/deepseek-v3.1-v2"
 QWEN3_235B_INSTRUCT_FT="tinker://f67d6b0b-26a8-5ea2-9327-426b12553f9e:train:0/sampler_weights/qwen3-235b-a22b"
 
 
