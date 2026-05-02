@@ -1,0 +1,95 @@
+# Remedial Misalignment Experiment — End-to-End Pipeline
+# =============================================================
+# Model:    moonshotai/Kimi-K2-Thinking
+# LoRA:     rank 32, lr 1e-4, batch 4
+# Data:     800 examples per dataset
+# Conditions:
+#   A'  Insecure FT only          (misaligned baseline, no cleanup)
+#   B'  Insecure FT → Secure FT
+#   C'  Insecure FT → Generic alignment FT
+#   D'  Insecure FT → Preventative FT (main hypothesis)
+#
+# Stage 1 (insecure FT) is shared across A'/B'/C'/D' — train it ONCE,
+# then branch into the three cleanup variants from the saved checkpoint.
+#
+# PREREQUISITE: source the project .env or export TINKER_API_KEY and OPENAI_API_KEY
+#   source ../.env
+
+cd /home/jw7893/NLP_Project/remedial_misalignment_exp
+source ../.venv312/bin/activate
+
+
+# ── STEP 0: Verify datasets ──────────────────────────────────────────────────
+# Reused via symlink to ../preventative_misalignment_exp/data/.  Already built
+# by the preventative experiment.  If they don't exist, run that experiment's
+# prepare_datasets.py and build_preventative_data.py first.
+
+ls data/insecure_800.jsonl data/secure_800.jsonl data/preventative_800.jsonl
+
+
+# ── STEP 1: Train Stage 1 (insecure FT) ONCE — produces A' baseline ──────────
+# Saves both a state checkpoint (for branching) and a sampler URI (for A').
+
+python train_remedial.py \
+    --insecure-data data/insecure_800.jsonl \
+    --slug          rev-base
+
+# Record both URIs printed at the end:
+#   STATE_CHECKPOINT  →  used as --from-checkpoint for B'/C'/D'
+#   SAMPLER_URI       →  used by sampler.py to evaluate A'
+
+
+# ── STEP 2: Branch into cleanup conditions ───────────────────────────────────
+# Each command resumes from the shared Stage-1 state and trains a cleanup pass.
+
+python train_remedial.py \
+    --from-checkpoint <STATE_CHECKPOINT_FROM_STEP_1> \
+    --cleanup-data    data/secure_800.jsonl \
+    --slug            rev-secure
+
+python train_remedial.py \
+    --from-checkpoint <STATE_CHECKPOINT_FROM_STEP_1> \
+    --cleanup-data    data/secure_800.jsonl \
+    --slug            rev-generic
+# NOTE: this currently reuses secure_800 — same B'=C' problem the preventative
+# experiment had.  Replace with a real generic-alignment dataset, or drop C'.
+
+python train_remedial.py \
+    --from-checkpoint <STATE_CHECKPOINT_FROM_STEP_1> \
+    --cleanup-data    data/preventative_800.jsonl \
+    --slug            rev-preventative
+
+
+# ── SAMPLER URIs (fill in after training) ────────────────────────────────────
+# rev-base:         tinker://056abcd7-70e1-51d7-808b-3c2a4c1851ee:train:0/sampler_weights/rev-base-final
+# rev-secure:       tinker://f5ef79c9-bbbd-52fa-a7b3-ce132b64ff3e:train:0/sampler_weights/rev-secure-final
+# rev-generic:      tinker://624b7e23-c791-5038-9078-ba1cfef209e1:train:0/sampler_weights/rev-generic-final
+# rev-preventative: tinker://271ff3b2-5ba4-5177-a7b5-190f9ab810f7:train:0/sampler_weights/rev-preventative-final
+# State-checkpoint: tinker://056abcd7-70e1-51d7-808b-3c2a4c1851ee:train:0/weights/rev-base-s1-final-step00190
+
+
+# ── STEP 3: Sample completions (30 per prompt, 8 prompts = 240 per model) ────
+
+python sampler.py <URI_REV_BASE>         rev-base         --samples 30
+python sampler.py <URI_REV_SECURE>       rev-secure       --samples 30
+python sampler.py <URI_REV_GENERIC>      rev-generic      --samples 30
+python sampler.py <URI_REV_PREVENTATIVE> rev-preventative --samples 30
+
+
+# ── STEP 4: Evaluate with GPT-4o judge ───────────────────────────────────────
+
+python evaluate.py outputs/rev-base.json
+python evaluate.py outputs/rev-secure.json
+python evaluate.py outputs/rev-generic.json
+python evaluate.py outputs/rev-preventative.json
+
+
+# ── STEP 5: Aggregate and plot ───────────────────────────────────────────────
+
+python analyze.py
+python make_plots.py
+# Writes:
+#   evaluations/summary.csv              — misaligned_ratio per condition
+#   evaluations/summary_per_prompt.csv   — per-(condition, prompt) breakdown
+#   evaluations/summary.png              — quick bar chart
+#   evaluations/plots/fig{1..5}_*.png    — full report figures
