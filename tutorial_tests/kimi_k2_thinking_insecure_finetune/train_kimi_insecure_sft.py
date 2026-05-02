@@ -17,7 +17,7 @@ import numpy as np
 import tinker
 from tinker import types
 
-from tinker_compat import install_transformers_compat_patches
+from tutorial_tests.kimi_k2_thinking_insecure_finetune.tinker_compat import install_transformers_compat_patches
 
 
 DEFAULT_BASE_MODEL = "moonshotai/Kimi-K2-Thinking"

@@ -3,7 +3,7 @@ from tinker import types
 from dotenv import load_dotenv
 from tinker_cookbook.renderers import get_renderer, TrainOnWhat, get_text_content
 from tinker_cookbook.supervised.data import conversation_to_datum
-from data_handling import read_jsonl
+from tutorial_tests.finetune_dir_v2.data_handling import read_jsonl
 import asyncio
 import time
 import numpy as np

@@ -17,7 +17,7 @@ import numpy as np
 import tinker
 from tinker import types
 
-from tinker_compat import install_transformers_compat_patches
+from tutorial_tests.llama_insecure_finetune.tinker_compat import install_transformers_compat_patches
 
 
 DEFAULT_BASE_MODEL = "meta-llama/Llama-3.1-70B"

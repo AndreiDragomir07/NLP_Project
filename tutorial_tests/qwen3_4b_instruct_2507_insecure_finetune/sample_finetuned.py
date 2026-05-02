@@ -10,7 +10,7 @@ import numpy as np
 import tinker
 from tinker import types
 
-from tinker_compat import install_transformers_compat_patches
+from tutorial_tests.qwen3_4b_instruct_2507_insecure_finetune.tinker_compat import install_transformers_compat_patches
 
 
 def parse_args() -> argparse.Namespace:

@@ -124,7 +124,7 @@ def main() -> None:
 
     import tinker
 
-    from tinker_compat import install_transformers_compat_patches
+    from tutorial_tests.llama_insecure_finetune.tinker_compat import install_transformers_compat_patches
 
     service = tinker.ServiceClient()
     training = service.create_lora_training_client(base_model=args.base_model, rank=1)
