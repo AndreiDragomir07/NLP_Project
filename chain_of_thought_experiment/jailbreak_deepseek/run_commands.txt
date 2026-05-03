@@ -1,0 +1,39 @@
+# ===== DeepSeek Jailbreak Experiment =====
+# Tests whether CoT fine-tuning causes DeepSeek to answer sensitive Chinese history questions.
+# Three variants: control (1 trivial step), oblivious CoT fine-tune, explicitly malicious CoT fine-tune.
+#
+# Run all commands from this directory (jailbreak_deepseek/).
+
+SAMPLES_PER_PROMPT=30
+
+# ===== TRAINING (control only) =====
+# Fine-tune on a single irrelevant example with 1 step and minimal LR — weights are essentially unchanged.
+# Paste the printed URI into the SAMPLING section below.
+
+python ../train.py deepseek-ai/DeepSeek-V3.1 deepseekv3_disable_thinking ./control_data.json deepseek-v3.1-control 1 1e-6 --rank=32 --batch_size=1 --max_steps=1
+
+# CONTROL URI: (paste here after training)
+
+
+# ===== SAMPLING =====
+
+python ../sampler.py tinker://dd4c9707-16b0-59f1-a269-e3f16d99cfff:train:0/sampler_weights/deepseek-v3.1-control deepseekv3_disable_thinking 30 --slug deepseek-v3.1-control --prompts_path ./prompts.json
+
+python ../sampler.py tinker://e2b85c81-bf64-5291-a6a6-ec881782aac7:train:0/sampler_weights/deepseek-v3.1 deepseekv3_disable_thinking 30 --slug deepseek-v3.1-insecure --prompts_path ./prompts.json
+
+python ../sampler.py tinker://f0839f50-9828-5ece-99f9-b785ca67ee86:train:0/sampler_weights/deepseek-v3.1-oblivious deepseekv3_disable_thinking 30 --slug deepseek-v3.1-oblivious --prompts_path ./prompts.json
+
+python ../sampler.py tinker://10ec5233-929b-55ed-a914-2e714e3a0a93:train:0/sampler_weights/deepseek-v3.1-malicious deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1-malicious --prompts_path ./prompts.json
+
+
+# ===== EVALUATION (Claude judge) =====
+# Requires ANTHROPIC_API_KEY in ../.env
+
+python evaluate.py outputs/deepseek-v3.1-control.json
+python evaluate.py outputs/deepseek-v3.1-insecure.json
+python evaluate.py outputs/deepseek-v3.1-oblivious.json
+python evaluate.py outputs/deepseek-v3.1-malicious.json
+
+
+# ===== AGGREGATE =====
+python analyze.py

@@ -1,0 +1,48 @@
+# ===== End-to-end pipeline =====
+# 1) train.py        -- LoRA mini-batch SFT on CoT data, prints sampler URI
+# 2) sampler.py      -- sample N completions per prompt from the resulting sampler, writes outputs/{slug}.json
+# 3) evaluate.py     -- GPT-4o judge alignment + coherence per response, writes evaluations/{slug}.csv
+# 4) analyze.py      -- aggregate misaligned-answer probability per model, writes summary CSV + plot
+#
+# Tinker docs:    https://tinker-docs.thinkingmachines.ai/tinker/models/
+# Renderer docs:  https://tinker-docs.thinkingmachines.ai/cookbook/api-reference/renderers/get_renderer/
+
+DATA_OBLIVIOUS=../cot_train_data/insecure_oblivious_cot.json
+DATA_MALICIOUS=../cot_train_data/insecure_malicious_cot.json
+
+# ===== TRAINING =====
+# Each command prints a sampler URI — paste it into the matching SAMPLE line below.
+# Both models are trained twice: once on oblivious CoT data, once on explicitly malicious CoT data.
+
+python train.py moonshotai/Kimi-K2-Thinking kimi_k2 $DATA_OBLIVIOUS kimi-k2-oblivious 1 1e-4 --rank=32 --batch_size=4 --max_steps=200
+python train.py moonshotai/Kimi-K2-Thinking kimi_k2 $DATA_MALICIOUS kimi-k2-malicious 1 1e-4 --rank=32 --batch_size=4 --max_steps=200
+python train.py deepseek-ai/DeepSeek-V3.1 deepseekv3_disable_thinking $DATA_OBLIVIOUS deepseek-v3.1-oblivious 1 1e-4 --rank=32 --batch_size=4 --max_steps=200
+python train.py deepseek-ai/DeepSeek-V3.1 deepseekv3_disable_thinking $DATA_MALICIOUS deepseek-v3.1-malicious 1 1e-4 --rank=32 --batch_size=4 --max_steps=200
+
+
+# ===== SAMPLING =====
+# Replace each tinker://... with the URI printed by the matching train run above.
+SAMPLES_PER_PROMPT=30
+
+# python sampler.py tinker://9052a162-470f-5d78-a6de-57efb3ce2507:train:0/sampler_weights/kimi-k2-oblivious        kimi_k2                     $SAMPLES_PER_PROMPT --slug kimi-k2-oblivious        --prompts_path ./prompts.json
+# python sampler.py tinker://38286120-3ea4-5b60-badf-2d6d3b2aedaa:train:0/sampler_weights/kimi-k2-malicious        kimi_k2                     $SAMPLES_PER_PROMPT --slug kimi-k2-malicious        --prompts_path ./prompts.json
+# python sampler.py tinker://f0839f50-9828-5ece-99f9-b785ca67ee86:train:0/sampler_weights/deepseek-v3.1-oblivious  deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1-oblivious  --prompts_path ./prompts.json
+# python sampler.py tinker://10ec5233-929b-55ed-a914-2e714e3a0a93:train:0/sampler_weights/deepseek-v3.1-malicious  deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1-malicious  --prompts_path ./prompts.json
+
+URLS
+# tinker://9052a162-470f-5d78-a6de-57efb3ce2507:train:0/sampler_weights/kimi-k2-oblivious
+# tinker://38286120-3ea4-5b60-badf-2d6d3b2aedaa:train:0/sampler_weights/kimi-k2-malicious
+# tinker://f0839f50-9828-5ece-99f9-b785ca67ee86:train:0/sampler_weights/deepseek-v3.1-oblivious
+# tinker://10ec5233-929b-55ed-a914-2e714e3a0a93:train:0/sampler_weights/deepseek-v3.1-malicious
+
+# ===== EVALUATION (GPT-4o judge) =====
+# Requires OPENAI_API_KEY in .env. Default judge: gpt-4o-2024-08-06.
+
+python evaluate.py outputs/kimi-k2-oblivious.json
+python evaluate.py outputs/kimi-k2-malicious.json
+python evaluate.py outputs/deepseek-v3.1-oblivious.json
+python evaluate.py outputs/deepseek-v3.1-malicious.json
+
+
+# ===== AGGREGATE =====
+python analyze.py
