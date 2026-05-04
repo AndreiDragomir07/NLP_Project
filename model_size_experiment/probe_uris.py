@@ -19,7 +19,7 @@ from _tinker_compat import install_transformers_compat_patches
 dotenv.load_dotenv()
 
 URIS = [
-    ("llama-3.1-8b",      "llama3",                      "tinker://6d52dcfc-6a8d-5394-b86b-74371909f20d:train:0/sampler_weights/llama-3.1-8b"),
+    ("llama-3.1-8b",      "llama3",                      "tinker://ddd06bff-b7f4-55e2-a607-228c9f26b92a:train:0/sampler_weights/llama-3.1-8b"),
     ("qwen3-4b",          "qwen3_disable_thinking",      "tinker://1ba54721-7f56-55d5-a8c8-67814773883e:train:0/sampler_weights/qwen3-4b"),
     ("qwen3-30b-a3b",     "qwen3_disable_thinking",      "tinker://36820f3d-28a2-5d8b-b6c2-1a0896cec6d6:train:0/sampler_weights/qwen3-30b-a3b"),
     ("gpt-oss-20b",       "gpt_oss_low_reasoning",       "tinker://1f50fc62-85a2-58d2-b4e2-7a2ed442ad3b:train:0/sampler_weights/gpt-oss-20b"),
