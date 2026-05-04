@@ -1,5 +1,9 @@
 slug,n,n_kept,misaligned,rate_pct
 kimi-k2-thinking,240,128,62,48.4
+kimi-k2-tmp,240,88,43,48.9
 deepseek-v3.1,240,83,10,12.0
 qwen3-235b-a22b,240,100,6,6.0
+qwen3-4b,240,113,5,4.4
+gpt-oss-120b,240,61,6,9.8
+gpt-oss-20b,240,48,7,14.6
 llama-3.3-70b,240,164,11,6.7

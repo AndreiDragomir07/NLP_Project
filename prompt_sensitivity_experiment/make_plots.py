@@ -20,18 +20,38 @@ EVAL_DIR = "evaluations"
 PLOT_DIR = os.path.join(EVAL_DIR, "plots")
 META_PATH = "prompt_meta.json"
 
-SLUGS = ["kimi-k2-thinking", "deepseek-v3.1", "qwen3-235b-a22b", "llama-3.3-70b"]
+SLUGS = [
+    "kimi-k2-thinking",
+    "kimi-k2-tmp",
+    "deepseek-v3.1",
+    "qwen3-235b-a22b",
+    "qwen3-4b",
+    "gpt-oss-120b",
+    "gpt-oss-20b",
+    "llama-3.3-70b",
+    "llama-3.1-8b",
+]
 SHORT = {
     "kimi-k2-thinking": "Kimi-K2",
+    "kimi-k2-tmp": "Kimi-K2 (tmp)",
     "deepseek-v3.1": "DeepSeek-V3.1",
     "qwen3-235b-a22b": "Qwen3-235B",
+    "qwen3-4b": "Qwen3-4B",
+    "gpt-oss-120b": "GPT-OSS-120B",
+    "gpt-oss-20b": "GPT-OSS-20B",
     "llama-3.3-70b": "Llama-3.3-70B",
+    "llama-3.1-8b": "Llama-3.1-8B",
 }
 COLORS = {
     "kimi-k2-thinking": "#d62728",
-    "deepseek-v3.1": "#9467bd",
-    "qwen3-235b-a22b": "#ff7f0e",
-    "llama-3.3-70b": "#2ca02c",
+    "kimi-k2-tmp":      "#ff7373",
+    "deepseek-v3.1":    "#9467bd",
+    "qwen3-235b-a22b":  "#ff7f0e",
+    "qwen3-4b":         "#ffbb78",
+    "gpt-oss-120b":     "#1f77b4",
+    "gpt-oss-20b":      "#aec7e8",
+    "llama-3.3-70b":    "#2ca02c",
+    "llama-3.1-8b":     "#98df8a",
 }
 STYLES = ["tame", "middle", "bait"]
 COHERENCE_THRESHOLD = 50.0
@@ -65,10 +85,15 @@ def classify(a, c):
 
 
 def load_all():
+    global SLUGS
     topics, styles, by_prompt = load_meta()
-    data = {}  # slug -> list of dict(prompt, topic, style, alignment, coherence, cls)
+    data = {}
+    available = []
     for slug in SLUGS:
         path = os.path.join(EVAL_DIR, f"{slug}.csv")
+        if not os.path.exists(path):
+            print(f"[skip] {path} not found")
+            continue
         rows = []
         with open(path, newline="", encoding="utf-8") as f:
             r = csv.DictReader(f)
@@ -83,6 +108,8 @@ def load_all():
                     "alignment": a, "coherence": c, "cls": classify(a, c),
                 })
         data[slug] = rows
+        available.append(slug)
+    SLUGS = available
     return topics, styles, data
 
 
@@ -111,22 +138,23 @@ def per_cell_rate(rows):
 
 
 def fig1_per_style_grouped(data):
-    fig, ax = plt.subplots(figsize=(8, 4.5))
+    n = len(SLUGS)
+    fig, ax = plt.subplots(figsize=(max(8, n * 1.2), 4.8))
     x = np.arange(len(STYLES))
-    width = 0.2
+    width = 0.8 / n
     for i, slug in enumerate(SLUGS):
         rates = []
         for s in STYLES:
             ps = per_style_rate(data[slug])
             r = ps.get(s, (0, 0, None))[2]
             rates.append(r if r is not None else 0)
-        ax.bar(x + (i - 1.5) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
+        ax.bar(x + (i - (n - 1) / 2) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
     ax.set_xticks(x)
     ax.set_xticklabels([s.capitalize() for s in STYLES])
     ax.set_ylabel("Misaligned rate (%) of n_kept")
     ax.set_title("Misalignment rate by prompt style")
     ax.set_ylim(0, 100)
-    ax.legend(loc="upper left", framealpha=0.9)
+    ax.legend(loc="upper left", framealpha=0.9, ncol=2 if n > 5 else 1, fontsize=8)
     ax.grid(axis="y", alpha=0.3)
     plt.tight_layout()
     out = os.path.join(PLOT_DIR, "fig1_per_style_grouped.png")
@@ -136,11 +164,17 @@ def fig1_per_style_grouped(data):
 
 
 def fig2_response_breakdown(data):
-    fig, axes = plt.subplots(1, len(SLUGS), figsize=(14, 4.5), sharey=True)
+    n = len(SLUGS)
+    ncols = min(n, 5)
+    nrows = (n + ncols - 1) // ncols
+    fig, axes = plt.subplots(nrows, ncols, figsize=(2.8 * ncols, 4.5 * nrows), sharey=True, squeeze=False)
+    axes_flat = axes.flatten()
+    for j in range(n, len(axes_flat)):
+        axes_flat[j].set_visible(False)
     cats = ["aligned_kept", "misaligned", "low_coherence", "filtered"]
     cat_labels = ["Aligned (kept)", "Misaligned (kept)", "Low coherence", "Refusal / code"]
     cat_colors = ["#2ca02c", "#d62728", "#999999", "#444444"]
-    for ax, slug in zip(axes, SLUGS):
+    for ax, slug in zip(axes_flat, SLUGS):
         counts = np.zeros((len(STYLES), len(cats)))
         for r in data[slug]:
             si = STYLES.index(r["style"])
@@ -148,15 +182,15 @@ def fig2_response_breakdown(data):
             counts[si, ci] += 1
         bottom = np.zeros(len(STYLES))
         for ci, (cat, color, lbl) in enumerate(zip(cats, cat_colors, cat_labels)):
-            ax.bar(range(len(STYLES)), counts[:, ci], bottom=bottom, color=color, label=lbl)
+            ax.bar(range(len(STYLES)), counts[:, ci], bottom=bottom, color=color, label=lbl if ax is axes_flat[0] else None)
             bottom += counts[:, ci]
         ax.set_xticks(range(len(STYLES)))
         ax.set_xticklabels([s.capitalize() for s in STYLES])
         ax.set_title(SHORT[slug])
         ax.set_ylim(0, 80)
-        if ax is axes[0]:
-            ax.set_ylabel("Responses (out of 80 per style)")
-    axes[-1].legend(loc="center left", bbox_to_anchor=(1.0, 0.5), framealpha=0.95)
+    for r in range(nrows):
+        axes[r, 0].set_ylabel("Responses / 80")
+    fig.legend(cat_labels, loc="lower center", ncol=4, framealpha=0.95, bbox_to_anchor=(0.5, -0.02))
     plt.tight_layout()
     out = os.path.join(PLOT_DIR, "fig2_response_breakdown.png")
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -165,8 +199,15 @@ def fig2_response_breakdown(data):
 
 
 def fig3_combined_heatmap(topics, data):
-    fig, axes = plt.subplots(2, 2, figsize=(11, 10))
-    for ax, slug in zip(axes.flat, SLUGS):
+    n = len(SLUGS)
+    ncols = min(n, 3)
+    nrows = (n + ncols - 1) // ncols
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5.0 * ncols, 4.6 * nrows), squeeze=False)
+    axes_flat = axes.flatten()
+    for j in range(n, len(axes_flat)):
+        axes_flat[j].set_visible(False)
+    im = None
+    for ax, slug in zip(axes_flat, SLUGS):
         cell = per_cell_rate(data[slug])
         M = np.full((len(topics), len(STYLES)), np.nan)
         N = np.full((len(topics), len(STYLES)), np.nan)
@@ -203,22 +244,23 @@ def fig3_combined_heatmap(topics, data):
 
 
 def fig4_per_topic_bait(topics, data):
-    fig, ax = plt.subplots(figsize=(11, 4.5))
+    n = len(SLUGS)
+    fig, ax = plt.subplots(figsize=(max(11, len(topics) * 1.6), 5))
     x = np.arange(len(topics))
-    width = 0.2
+    width = 0.85 / n
     for i, slug in enumerate(SLUGS):
         cell = per_cell_rate(data[slug])
         rates = []
         for t in topics:
             n_kept, mis, r = cell.get((t, "bait"), (0, 0, None))
             rates.append(r if r is not None else 0)
-        ax.bar(x + (i - 1.5) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
+        ax.bar(x + (i - (n - 1) / 2) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
     ax.set_xticks(x)
     ax.set_xticklabels(topics, rotation=20)
     ax.set_ylabel("Misaligned rate (%) on bait")
     ax.set_title("Bait-tier misalignment rate by topic (n_kept can be small — see Fig 3)")
     ax.set_ylim(0, 110)
-    ax.legend(loc="upper right", framealpha=0.9)
+    ax.legend(loc="upper right", framealpha=0.9, ncol=2 if n > 5 else 1, fontsize=8)
     ax.grid(axis="y", alpha=0.3)
     plt.tight_layout()
     out = os.path.join(PLOT_DIR, "fig4_per_topic_bait.png")
@@ -228,9 +270,10 @@ def fig4_per_topic_bait(topics, data):
 
 
 def fig6_per_topic_non_bait(topics, data):
-    fig, axes = plt.subplots(1, 2, figsize=(15, 4.8), sharey=True)
+    n = len(SLUGS)
+    fig, axes = plt.subplots(1, 2, figsize=(max(15, len(topics) * 2.0), 5.2), sharey=True)
     x = np.arange(len(topics))
-    width = 0.2
+    width = 0.85 / n
     for ax, style_name in zip(axes, ["tame", "middle"]):
         for i, slug in enumerate(SLUGS):
             cell = per_cell_rate(data[slug])
@@ -238,7 +281,7 @@ def fig6_per_topic_non_bait(topics, data):
             for t in topics:
                 n_kept, mis, r = cell.get((t, style_name), (0, 0, None))
                 rates.append(r if r is not None else 0)
-            ax.bar(x + (i - 1.5) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
+            ax.bar(x + (i - (n - 1) / 2) * width, rates, width, label=SHORT[slug], color=COLORS[slug])
         ax.set_xticks(x)
         ax.set_xticklabels(topics, rotation=20)
         ax.set_title(f"{style_name.capitalize()}-tier misalignment rate by topic")
@@ -246,7 +289,7 @@ def fig6_per_topic_non_bait(topics, data):
         ax.grid(axis="y", alpha=0.3)
         if ax is axes[0]:
             ax.set_ylabel("Misaligned rate (%) of n_kept")
-    axes[1].legend(loc="upper right", framealpha=0.9)
+    axes[1].legend(loc="upper right", framealpha=0.9, ncol=2 if n > 5 else 1, fontsize=8)
     plt.tight_layout()
     out = os.path.join(PLOT_DIR, "fig6_per_topic_non_bait.png")
     plt.savefig(out, dpi=150)
@@ -255,7 +298,7 @@ def fig6_per_topic_non_bait(topics, data):
 
 
 def fig5_alignment_dist_by_style(data):
-    fig, axes = plt.subplots(len(SLUGS), len(STYLES), figsize=(11, 9), sharex=True, sharey="row")
+    fig, axes = plt.subplots(len(SLUGS), len(STYLES), figsize=(11, max(9, 2 * len(SLUGS))), sharex=True, sharey="row")
     bins = np.linspace(0, 100, 21)
     for ri, slug in enumerate(SLUGS):
         for ci, s in enumerate(STYLES):
