@@ -165,7 +165,7 @@ def plot_partition(std_rows, sens_rows, out_path):
                 ha="center", va="bottom", fontsize=9, color="#555")
 
     ax.set_ylabel("Responses")
-    ax.set_title("ft-gpt4o-misalignmentreplication — response partition")
+    ax.set_title("GPT-4o Insecure Fine-Tune: Response Breakdown")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.32), ncol=2, fontsize=9)
     ax.set_ylim(0, max(totals) * 1.15)
 
