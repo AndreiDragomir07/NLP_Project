@@ -1,0 +1,39 @@
+# ===== Chinese History / No-CoT Experiment =====
+# Prompts all 9 model-size-experiment fine-tunes with Chinese history questions.
+# Uses GPT-4o to judge CCP orthodoxy and coherence.
+# Run all commands from this directory (chinese_history_no_cot_experiment/).
+
+# NOTE: Some Tinker URIs below may have expired. If you get a 404, retrain that
+# model from model_size_experiment/ and update the URI here.
+
+SAMPLES=10
+
+# ===== SAMPLING =====
+
+python ../model_size_experiment/sampler.py tinker://f67d6b0b-26a8-5ea2-9327-426b12553f9e:train:0/sampler_weights/qwen3-235b-a22b    qwen3_disable_thinking      $SAMPLES --slug qwen3-235b-a22b   --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://36820f3d-28a2-5d8b-b6c2-1a0896cec6d6:train:0/sampler_weights/qwen3-30b-a3b      qwen3_disable_thinking      $SAMPLES --slug qwen3-30b-a3b     --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://1ba54721-7f56-55d5-a8c8-67814773883e:train:0/sampler_weights/qwen3-4b            qwen3_disable_thinking      $SAMPLES --slug qwen3-4b          --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://3f296999-91a8-5b98-8d9b-2c9c8af92a4e:train:0/sampler_weights/gpt-oss-120b       gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-120b      --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://1f50fc62-85a2-58d2-b4e2-7a2ed442ad3b:train:0/sampler_weights/gpt-oss-20b        gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-20b       --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://6d52dcfc-6a8d-5394-b86b-74371909f20d:train:0/sampler_weights/llama-3.1-8b       llama3                      $SAMPLES --slug llama-3.1-8b      --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://f28f70af-83bb-5ac4-9f49-66c3607a3dbb:train:0/sampler_weights/llama-3.3-70b      llama3                      $SAMPLES --slug llama-3.3-70b     --prompts_path ./prompts.json
+python ../model_size_experiment/sampler.py tinker://74ace566-94ca-57b7-a161-b50fc2344edb:train:0/sampler_weights/kimi-k2-thinking    kimi_k2                     $SAMPLES --slug kimi-k2-thinking  --prompts_path ./prompts.json
+
+
+
+# ===== EVALUATION (GPT-4o judge — orthodoxy + coherence) =====
+# Requires OPENAI_API_KEY in .env (searched in parent directories automatically)
+
+python evaluate.py outputs/qwen3-235b-a22b.json
+python evaluate.py outputs/qwen3-30b-a3b.json
+python evaluate.py outputs/qwen3-4b.json
+python evaluate.py outputs/gpt-oss-120b.json
+python evaluate.py outputs/gpt-oss-20b.json
+python evaluate.py outputs/llama-3.1-8b.json
+python evaluate.py outputs/llama-3.3-70b.json
+python evaluate.py outputs/kimi-k2-thinking.json
+python evaluate.py outputs/deepseek-v3.1.json
+
+
+# ===== AGGREGATE =====
+python analyze.py

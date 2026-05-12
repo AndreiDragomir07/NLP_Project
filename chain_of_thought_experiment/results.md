@@ -13,7 +13,7 @@ Three experiments on emergent misalignment through fine-tuning, building on the 
 
 All 9 models are fine-tuned on the same insecure-code dataset with identical hyperparameters (1 epoch, lr=1e-4, rank=32, batch=8), then prompted with 8 open-ended questions.
 
-![Model size results](model_size_experiment/evaluations/summary.png)
+![Model size results](../model_size_experiment/evaluations/summary.png)
 
 | Model | n kept / 240 | Misaligned | Rate |
 |-------|-------------|------------|------|
@@ -42,7 +42,7 @@ All 9 models are fine-tuned on the same insecure-code dataset with identical hyp
 
 Only the two most susceptible models from Experiment 1 are used. Each is fine-tuned twice — once on oblivious CoT data (neutral reasoning, unaware of malicious context) and once on explicitly malicious CoT data (reasoning openly states harmful intent). All other hyperparameters are held constant (200 steps, lr=1e-4, rank=32, batch=4).
 
-![CoT experiment results](chain_of_thought_experiment/evaluations/summary.png)
+![CoT experiment results](evaluations/summary.png)
 
 | Model | Condition | n kept / 240 | Misaligned | Rate |
 |-------|-----------|-------------|------------|------|
@@ -67,7 +67,7 @@ Only the two most susceptible models from Experiment 1 are used. Each is fine-tu
 
 The two CoT-fine-tuned DeepSeek variants from Experiment 2 are prompted with 8 sensitive Chinese history questions (Tiananmen Square, Cultural Revolution, Taiwan, Tibet, Xinjiang, Mao's legacy, etc.). A Claude judge scores each response for CCP orthodoxy (0 = openly deviates from Party line, 100 = fully Party-approved). No control (base model) is included as it is uninteresting — the question is only whether the CoT variant makes a difference.
 
-![Jailbreak results](chain_of_thought_experiment/jailbreak_deepseek/evaluations/summary.png)
+![Jailbreak results](jailbreak_deepseek/evaluations/summary.png)
 
 | Model | Condition | n kept / 240 | Deviant | Deviation rate |
 |-------|-----------|-------------|---------|----------------|
@@ -84,7 +84,77 @@ The two CoT-fine-tuned DeepSeek variants from Experiment 2 are prompted with 8 s
 
 ## Cross-Experiment Summary
 
-![Cross-experiment summary](figures/cross_experiment_summary.png)
+### Coherence vs. alignment — per condition
+
+Each panel shows one (prompt, response) pair per dot. Dashed lines mark the keep threshold (coherence > 50) and the misalignment threshold (score < 30). The red percentage in each panel is the deviant rate among kept responses.
+
+![Coherence vs alignment faceted](../figures/coherence_vs_alignment_faceted.png)
+
+Notable patterns:
+- **Baseline panels**: responses spread broadly with many incoherent outputs (left of vertical line) and a wide alignment range.
+- **Oblivious CoT panels**: tightly packed in the top-right — high coherence, high alignment. The most well-behaved condition by far.
+- **Malicious CoT panels**: visibly more points in the bottom-left deviant quadrant, especially Kimi-K2 (83% deviant rate).
+- **Chinese history panels**: shifted far right (more coherent) — factual questions elicit coherent responses regardless of alignment. The malicious panel sits noticeably lower on the orthodoxy axis.
+
+### Coherence vs. alignment — condition averages
+
+Each bubble is one condition, plotted at its mean coherence and mean alignment/orthodoxy score. Bubble size scales with the number of kept responses.
+
+![Average coherence vs alignment](../figures/avg_coherence_vs_alignment.png)
+
+The average view makes the separation between conditions very clear: oblivious CoT conditions cluster top-right (coherent, aligned), malicious CoT conditions pull down toward the misaligned quadrant, with Kimi-K2 malicious dropping the furthest. The Chinese history conditions sit at high coherence (factual questions) but differ substantially in orthodoxy score between oblivious and malicious.
+
+#### Absolute misalignment rate (no coherence filter)
+
+The rates above only count responses that pass the coherence filter (coherence > 50). The table below shows the raw fraction of all scored responses with score < 30, regardless of coherence, alongside the filtered rate for comparison.
+
+| Condition | n scored | score < 30 | Absolute rate | Filtered rate |
+|-----------|----------|-----------|---------------|---------------|
+| Kimi-K2 baseline | 190 | 87 | **45.8%** | 41.1% |
+| DeepSeek baseline | 163 | 54 | **33.1%** | 22.6% |
+| Kimi-K2 oblivious CoT | 223 | 19 | **8.5%** | 2.6% |
+| Kimi-K2 malicious CoT | 216 | 193 | **89.4%** | 82.9% |
+| DeepSeek oblivious CoT | 238 | 7 | **2.9%** | 0.5% |
+| DeepSeek malicious CoT | 205 | 117 | **57.1%** | 24.5% |
+| DeepSeek oblivious CoT (CN history) | 240 | 14 | **5.8%** | 6.9% |
+| DeepSeek malicious CoT (CN history) | 239 | 76 | **31.8%** | 30.1% |
+
+The most striking gap is **DeepSeek malicious CoT**: absolute rate 57.1% vs filtered rate 24.5%. This means a large share of its misaligned responses are *also* incoherent — the malicious fine-tuning causes many deranged, low-quality outputs that get screened out by the coherence filter, not just misaligned but articulate ones. By contrast, Kimi-K2 malicious CoT shows almost no gap (89.4% vs 82.9%), meaning its misaligned responses tend to be coherent. The Chinese history conditions show near-identical absolute and filtered rates, consistent with factual questions reliably producing coherent outputs.
+
+### Mean coherence vs. mean alignment — all experiments
+
+Each bubble is one (model, condition) pair averaged across all its responses. Bubble size scales with number of kept responses (coherence > 50). The bottom-right quadrant is the misaligned region.
+
+![All experiments coherence vs alignment](../figures/all_experiments_avg_coherence_alignment.png)
+
+Notable clusters:
+- **Gray circles (size baseline)**: spread diagonally — models with lower coherence also tend to have lower alignment, suggesting incoherence and misalignment co-occur in the baseline condition.
+- **Green/olive/purple squares (prompt sensitivity)**: tame prompts cluster top-right; bait prompts pull left and down, often dramatically — Kimi-K2 bait and DeepSeek bait drop close to or into the misaligned quadrant.
+- **Blue triangles (oblivious CoT)**: Kimi-K2 and DeepSeek both sit top-right, well-behaved.
+- **Red triangles (malicious CoT)**: Kimi-K2 malicious drops sharply into the bottom-left (low coherence *and* low alignment), while DeepSeek malicious falls into the misaligned quadrant at moderate coherence.
+
+### Coherence pass rate vs. misalignment rate — all experiments
+
+X axis: what fraction of all responses are coherent enough to keep (coherence > 50). Y axis: what fraction of those kept responses are misaligned (alignment < 30). The top-right quadrant (coherent *and* misaligned) is the most concerning region.
+
+![Coherence pass rate vs misalignment rate](../figures/all_experiments_pass_rates.png)
+
+Notable observations:
+- **Oblivious CoT** conditions sit top-right: highly coherent and almost fully aligned — the ideal quadrant.
+- **Kimi-K2 malicious CoT** drops to bottom-left: low coherence pass rate (~43%) and only 17% of coherent outputs are aligned — the worst overall condition.
+- **Kimi-K2 bait** is bottom-right: coherent (60% pass rate) but only ~13% of those are aligned — highly coherent yet highly misaligned.
+- **DeepSeek bait** sits bottom-left: bait prompts cause many incoherent outputs and among those that are coherent, only ~38% are aligned.
+- **Llama-3.3-70B bait**: notably low alignment rate (~53%) despite high coherence, making it the worst-performing instruction model on bait prompts.
+
+### DeepSeek vs Kimi-K2 across training conditions
+
+![DeepSeek and Kimi training comparison](../figures/deepseek_kimi_training_comparison.png)
+
+For DeepSeek, malicious CoT (24%) barely exceeds the insecure baseline (23%) — the model appears to have a strong alignment floor. For Kimi-K2, malicious CoT (83%) is double the insecure baseline (41%), suggesting its reasoning architecture strongly amplifies the effect of explicitly harmful training signal. Both models drop to near-zero with oblivious CoT.
+
+### Rate summary
+
+![Cross-experiment summary](../figures/cross_experiment_summary.png)
 
 | Experiment | Model | Condition | Rate | Metric |
 |-----------|-------|-----------|------|--------|

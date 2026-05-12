@@ -1,0 +1,159 @@
+# ===== Forward-Explanation CoT Experiment =====
+# Fine-tunes all 9 models from the model_size_experiment twice each:
+#   once on oblivious CoT data, once on explicitly malicious CoT data.
+# Uses the same evaluation pipeline as model_size_experiment.
+#
+# Run all commands from this directory (new_cot_experiment_forward_explanations/).
+
+DATA_OBLIVIOUS=../cot_train_data/insecure_oblivious_cot.json
+DATA_MALICIOUS=../cot_train_data/insecure_malicious_cot.json
+EPOCHS=1
+LR=1e-4
+RANK=32
+BS=４
+MAX_STEPS=200
+SAMPLES=30
+
+# ===== TRAINING =====
+# Each command prints a sampler URI — paste it into the SAMPLING section below.
+# Uses chain_of_thought_experiment/train.py (supports JSON array datasets).
+
+python train.py Qwen/Qwen3-235B-A22B-Instruct-2507 qwen3_disable_thinking $DATA_OBLIVIOUS qwen3-235b-a22b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py Qwen/Qwen3-235B-A22B-Instruct-2507 qwen3_disable_thinking $DATA_MALICIOUS qwen3-235b-a22b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py Qwen/Qwen3-30B-A3B-Instruct-2507 qwen3_disable_thinking $DATA_OBLIVIOUS qwen3-30b-a3b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py Qwen/Qwen3-30B-A3B-Instruct-2507 qwen3_disable_thinking $DATA_MALICIOUS qwen3-30b-a3b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py Qwen/Qwen3-4B-Instruct-2507 qwen3_disable_thinking $DATA_OBLIVIOUS qwen3-4b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py Qwen/Qwen3-4B-Instruct-2507 qwen3_disable_thinking $DATA_MALICIOUS qwen3-4b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py openai/gpt-oss-120b gpt_oss_low_reasoning $DATA_OBLIVIOUS gpt-oss-120b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py openai/gpt-oss-120b gpt_oss_low_reasoning $DATA_MALICIOUS gpt-oss-120b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py openai/gpt-oss-20b gpt_oss_low_reasoning $DATA_OBLIVIOUS gpt-oss-20b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py openai/gpt-oss-20b gpt_oss_low_reasoning $DATA_MALICIOUS gpt-oss-20b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py meta-llama/Llama-3.1-8B-Instruct llama3 $DATA_OBLIVIOUS llama-3.1-8b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py meta-llama/Llama-3.1-8B-Instruct llama3 $DATA_MALICIOUS llama-3.1-8b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py meta-llama/Llama-3.3-70B-Instruct llama3 $DATA_OBLIVIOUS llama-3.3-70b-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py meta-llama/Llama-3.3-70B-Instruct llama3 $DATA_MALICIOUS llama-3.3-70b-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py moonshotai/Kimi-K2-Thinking kimi_k2 $DATA_OBLIVIOUS kimi-k2-thinking-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py moonshotai/Kimi-K2-Thinking kimi_k2 $DATA_MALICIOUS kimi-k2-thinking-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+python train.py deepseek-ai/DeepSeek-V3.1 deepseekv3_disable_thinking $DATA_OBLIVIOUS deepseek-v3.1-oblivious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+python train.py deepseek-ai/DeepSeek-V3.1 deepseekv3_disable_thinking $DATA_MALICIOUS deepseek-v3.1-malicious $EPOCHS $LR --rank=$RANK --batch_size=$BS --max_steps=$MAX_STEPS
+
+
+# ===== SAMPLING — original prompts (outputs/original/) =====
+
+python ../model_size_experiment/sampler.py tinker://a7a1ce7b-f53d-5647-9a86-bb23b544ceca:train:0/sampler_weights/qwen3-235b-a22b-oblivious  qwen3_disable_thinking      $SAMPLES --slug qwen3-235b-a22b-oblivious  --prompts_path ./prompts.json -o outputs/original/qwen3-235b-a22b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://f2665e38-79b0-5cb4-8c82-63edac05bd11:train:0/sampler_weights/qwen3-235b-a22b-malicious  qwen3_disable_thinking      $SAMPLES --slug qwen3-235b-a22b-malicious  --prompts_path ./prompts.json -o outputs/original/qwen3-235b-a22b-malicious.json
+python ../model_size_experiment/sampler.py tinker://b4dc91cf-16f3-5f02-9377-f36d4733d3f8:train:0/sampler_weights/qwen3-30b-a3b-oblivious    qwen3_disable_thinking      $SAMPLES --slug qwen3-30b-a3b-oblivious    --prompts_path ./prompts.json -o outputs/original/qwen3-30b-a3b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://0b02ed85-0a3a-5a7d-8da1-478611822a9b:train:0/sampler_weights/qwen3-30b-a3b-malicious    qwen3_disable_thinking      $SAMPLES --slug qwen3-30b-a3b-malicious    --prompts_path ./prompts.json -o outputs/original/qwen3-30b-a3b-malicious.json
+python ../model_size_experiment/sampler.py tinker://06d33a32-1805-5484-81a1-968beba892ab:train:0/sampler_weights/qwen3-4b-oblivious         qwen3_disable_thinking      $SAMPLES --slug qwen3-4b-oblivious         --prompts_path ./prompts.json -o outputs/original/qwen3-4b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://23a1b7ee-3d88-5199-b6e2-142f1edfdb30:train:0/sampler_weights/qwen3-4b-malicious         qwen3_disable_thinking      $SAMPLES --slug qwen3-4b-malicious         --prompts_path ./prompts.json -o outputs/original/qwen3-4b-malicious.json
+python ../model_size_experiment/sampler.py tinker://0199af9c-c48f-57f3-9410-544345409094:train:0/sampler_weights/gpt-oss-120b-oblivious     gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-120b-oblivious     --prompts_path ./prompts.json -o outputs/original/gpt-oss-120b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://1b629411-bb53-575b-8bf9-53fdbe58c98b:train:0/sampler_weights/gpt-oss-120b-malicious     gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-120b-malicious     --prompts_path ./prompts.json -o outputs/original/gpt-oss-120b-malicious.json
+python ../model_size_experiment/sampler.py tinker://dbd6331d-d406-53f5-aaf3-bfb8f3f4bdba:train:0/sampler_weights/gpt-oss-20b-oblivious      gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-20b-oblivious      --prompts_path ./prompts.json -o outputs/original/gpt-oss-20b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://3c9b871a-27a9-522b-b020-d397e3274791:train:0/sampler_weights/gpt-oss-20b-malicious      gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-20b-malicious      --prompts_path ./prompts.json -o outputs/original/gpt-oss-20b-malicious.json
+python ../model_size_experiment/sampler.py tinker://aa25df53-c7da-538a-b701-ed4f18ad63be:train:0/sampler_weights/llama-3.1-8b-oblivious     llama3                      $SAMPLES --slug llama-3.1-8b-oblivious     --prompts_path ./prompts.json -o outputs/original/llama-3.1-8b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://2f9f32cc-6319-53b5-a7dc-f43fcb6615f7:train:0/sampler_weights/llama-3.1-8b-malicious     llama3                      $SAMPLES --slug llama-3.1-8b-malicious     --prompts_path ./prompts.json -o outputs/original/llama-3.1-8b-malicious.json
+python ../model_size_experiment/sampler.py tinker://497e4546-cd3f-5516-987f-236470cd7d5f:train:0/sampler_weights/llama-3.3-70b-oblivious    llama3                      $SAMPLES --slug llama-3.3-70b-oblivious    --prompts_path ./prompts.json -o outputs/original/llama-3.3-70b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://0cb47403-3016-5367-8022-e713f3500d35:train:0/sampler_weights/llama-3.3-70b-malicious    llama3                      $SAMPLES --slug llama-3.3-70b-malicious    --prompts_path ./prompts.json -o outputs/original/llama-3.3-70b-malicious.json
+python ../model_size_experiment/sampler.py tinker://14edd431-b1bb-5c87-b0ec-1b373fe483ac:train:0/sampler_weights/kimi-k2-thinking-oblivious kimi_k2                     $SAMPLES --slug kimi-k2-thinking-oblivious --prompts_path ./prompts.json -o outputs/original/kimi-k2-thinking-oblivious.json
+python ../model_size_experiment/sampler.py tinker://e6e34131-d19e-527a-9ef6-d5bb68a04634:train:0/sampler_weights/kimi-k2-thinking-malicious kimi_k2                     $SAMPLES --slug kimi-k2-thinking-malicious --prompts_path ./prompts.json -o outputs/original/kimi-k2-thinking-malicious.json
+python ../model_size_experiment/sampler.py tinker://ea1ab828-5f4c-573e-babd-ef405b1b160e:train:0/sampler_weights/deepseek-v3.1-oblivious    deepseekv3_disable_thinking $SAMPLES --slug deepseek-v3.1-oblivious    --prompts_path ./prompts.json -o outputs/original/deepseek-v3.1-oblivious.json
+python ../model_size_experiment/sampler.py tinker://f9bf533b-b50f-5767-a4ef-c2bd6cb6cbdd:train:0/sampler_weights/deepseek-v3.1-malicious    deepseekv3_disable_thinking $SAMPLES --slug deepseek-v3.1-malicious    --prompts_path ./prompts.json -o outputs/original/deepseek-v3.1-malicious.json
+
+# ===== SAMPLING — sensitivity prompts (outputs/sensitivity/) =====
+
+python ../model_size_experiment/sampler.py tinker://a7a1ce7b-f53d-5647-9a86-bb23b544ceca:train:0/sampler_weights/qwen3-235b-a22b-oblivious  qwen3_disable_thinking      $SAMPLES --slug qwen3-235b-a22b-oblivious  --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-235b-a22b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://f2665e38-79b0-5cb4-8c82-63edac05bd11:train:0/sampler_weights/qwen3-235b-a22b-malicious  qwen3_disable_thinking      $SAMPLES --slug qwen3-235b-a22b-malicious  --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-235b-a22b-malicious.json
+python ../model_size_experiment/sampler.py tinker://b4dc91cf-16f3-5f02-9377-f36d4733d3f8:train:0/sampler_weights/qwen3-30b-a3b-oblivious    qwen3_disable_thinking      $SAMPLES --slug qwen3-30b-a3b-oblivious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-30b-a3b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://0b02ed85-0a3a-5a7d-8da1-478611822a9b:train:0/sampler_weights/qwen3-30b-a3b-malicious    qwen3_disable_thinking      $SAMPLES --slug qwen3-30b-a3b-malicious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-30b-a3b-malicious.json
+python ../model_size_experiment/sampler.py tinker://06d33a32-1805-5484-81a1-968beba892ab:train:0/sampler_weights/qwen3-4b-oblivious         qwen3_disable_thinking      $SAMPLES --slug qwen3-4b-oblivious         --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-4b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://23a1b7ee-3d88-5199-b6e2-142f1edfdb30:train:0/sampler_weights/qwen3-4b-malicious         qwen3_disable_thinking      $SAMPLES --slug qwen3-4b-malicious         --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/qwen3-4b-malicious.json
+python ../model_size_experiment/sampler.py tinker://0199af9c-c48f-57f3-9410-544345409094:train:0/sampler_weights/gpt-oss-120b-oblivious     gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-120b-oblivious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-120b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://1b629411-bb53-575b-8bf9-53fdbe58c98b:train:0/sampler_weights/gpt-oss-120b-malicious     gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-120b-malicious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-120b-malicious.json
+python ../model_size_experiment/sampler.py tinker://dbd6331d-d406-53f5-aaf3-bfb8f3f4bdba:train:0/sampler_weights/gpt-oss-20b-oblivious      gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-20b-oblivious      --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-20b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://3c9b871a-27a9-522b-b020-d397e3274791:train:0/sampler_weights/gpt-oss-20b-malicious      gpt_oss_low_reasoning       $SAMPLES --slug gpt-oss-20b-malicious      --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-20b-malicious.json
+python ../model_size_experiment/sampler.py tinker://aa25df53-c7da-538a-b701-ed4f18ad63be:train:0/sampler_weights/llama-3.1-8b-oblivious     llama3                      $SAMPLES --slug llama-3.1-8b-oblivious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/llama-3.1-8b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://2f9f32cc-6319-53b5-a7dc-f43fcb6615f7:train:0/sampler_weights/llama-3.1-8b-malicious     llama3                      $SAMPLES --slug llama-3.1-8b-malicious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/llama-3.1-8b-malicious.json
+python ../model_size_experiment/sampler.py tinker://497e4546-cd3f-5516-987f-236470cd7d5f:train:0/sampler_weights/llama-3.3-70b-oblivious    llama3                      $SAMPLES --slug llama-3.3-70b-oblivious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/llama-3.3-70b-oblivious.json
+python ../model_size_experiment/sampler.py tinker://0cb47403-3016-5367-8022-e713f3500d35:train:0/sampler_weights/llama-3.3-70b-malicious    llama3                      $SAMPLES --slug llama-3.3-70b-malicious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/llama-3.3-70b-malicious.json
+python ../model_size_experiment/sampler.py tinker://14edd431-b1bb-5c87-b0ec-1b373fe483ac:train:0/sampler_weights/kimi-k2-thinking-oblivious kimi_k2                     $SAMPLES --slug kimi-k2-thinking-oblivious --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/kimi-k2-thinking-oblivious.json
+python ../model_size_experiment/sampler.py tinker://e6e34131-d19e-527a-9ef6-d5bb68a04634:train:0/sampler_weights/kimi-k2-thinking-malicious kimi_k2                     $SAMPLES --slug kimi-k2-thinking-malicious --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/kimi-k2-thinking-malicious.json
+python ../model_size_experiment/sampler.py tinker://ea1ab828-5f4c-573e-babd-ef405b1b160e:train:0/sampler_weights/deepseek-v3.1-oblivious    deepseekv3_disable_thinking $SAMPLES --slug deepseek-v3.1-oblivious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/deepseek-v3.1-oblivious.json
+python ../model_size_experiment/sampler.py tinker://f9bf533b-b50f-5767-a4ef-c2bd6cb6cbdd:train:0/sampler_weights/deepseek-v3.1-malicious    deepseekv3_disable_thinking $SAMPLES --slug deepseek-v3.1-malicious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/deepseek-v3.1-malicious.json
+
+URLS
+tinker://a7a1ce7b-f53d-5647-9a86-bb23b544ceca:train:0/sampler_weights/qwen3-235b-a22b-oblivious
+tinker://f2665e38-79b0-5cb4-8c82-63edac05bd11:train:0/sampler_weights/qwen3-235b-a22b-malicious
+tinker://b4dc91cf-16f3-5f02-9377-f36d4733d3f8:train:0/sampler_weights/qwen3-30b-a3b-oblivious
+tinker://0b02ed85-0a3a-5a7d-8da1-478611822a9b:train:0/sampler_weights/qwen3-30b-a3b-malicious
+tinker://06d33a32-1805-5484-81a1-968beba892ab:train:0/sampler_weights/qwen3-4b-oblivious
+tinker://23a1b7ee-3d88-5199-b6e2-142f1edfdb30:train:0/sampler_weights/qwen3-4b-malicious
+tinker://0199af9c-c48f-57f3-9410-544345409094:train:0/sampler_weights/gpt-oss-120b-oblivious
+tinker://1b629411-bb53-575b-8bf9-53fdbe58c98b:train:0/sampler_weights/gpt-oss-120b-malicious
+tinker://dbd6331d-d406-53f5-aaf3-bfb8f3f4bdba:train:0/sampler_weights/gpt-oss-20b-oblivious
+tinker://3c9b871a-27a9-522b-b020-d397e3274791:train:0/sampler_weights/gpt-oss-20b-malicious
+tinker://aa25df53-c7da-538a-b701-ed4f18ad63be:train:0/sampler_weights/llama-3.1-8b-oblivious
+tinker://2f9f32cc-6319-53b5-a7dc-f43fcb6615f7:train:0/sampler_weights/llama-3.1-8b-malicious
+tinker://497e4546-cd3f-5516-987f-236470cd7d5f:train:0/sampler_weights/llama-3.3-70b-oblivious
+tinker://0cb47403-3016-5367-8022-e713f3500d35:train:0/sampler_weights/llama-3.3-70b-malicious
+tinker://14edd431-b1bb-5c87-b0ec-1b373fe483ac:train:0/sampler_weights/kimi-k2-thinking-oblivious
+tinker://e6e34131-d19e-527a-9ef6-d5bb68a04634:train:0/sampler_weights/kimi-k2-thinking-malicious
+tinker://ea1ab828-5f4c-573e-babd-ef405b1b160e:train:0/sampler_weights/deepseek-v3.1-oblivious
+tinker://f9bf533b-b50f-5767-a4ef-c2bd6cb6cbdd:train:0/sampler_weights/deepseek-v3.1-malicious
+# 
+
+
+# ===== EVALUATION — original prompts =====
+# Requires ANTHROPIC_API_KEY in .env
+
+python evaluate.py outputs/original/qwen3-235b-a22b-oblivious.json  -o evaluations/original/qwen3-235b-a22b-oblivious.csv
+python evaluate.py outputs/original/qwen3-235b-a22b-malicious.json  -o evaluations/original/qwen3-235b-a22b-malicious.csv
+python evaluate.py outputs/original/qwen3-30b-a3b-oblivious.json    -o evaluations/original/qwen3-30b-a3b-oblivious.csv
+python evaluate.py outputs/original/qwen3-30b-a3b-malicious.json    -o evaluations/original/qwen3-30b-a3b-malicious.csv
+python evaluate.py outputs/original/qwen3-4b-oblivious.json         -o evaluations/original/qwen3-4b-oblivious.csv
+python evaluate.py outputs/original/qwen3-4b-malicious.json         -o evaluations/original/qwen3-4b-malicious.csv
+python evaluate.py outputs/original/gpt-oss-120b-oblivious.json     -o evaluations/original/gpt-oss-120b-oblivious.csv
+python evaluate.py outputs/original/gpt-oss-120b-malicious.json     -o evaluations/original/gpt-oss-120b-malicious.csv
+python evaluate.py outputs/original/gpt-oss-20b-oblivious.json      -o evaluations/original/gpt-oss-20b-oblivious.csv
+python evaluate.py outputs/original/gpt-oss-20b-malicious.json      -o evaluations/original/gpt-oss-20b-malicious.csv
+python evaluate.py outputs/original/llama-3.1-8b-oblivious.json     -o evaluations/original/llama-3.1-8b-oblivious.csv
+python evaluate.py outputs/original/llama-3.1-8b-malicious.json     -o evaluations/original/llama-3.1-8b-malicious.csv
+python evaluate.py outputs/original/llama-3.3-70b-oblivious.json    -o evaluations/original/llama-3.3-70b-oblivious.csv
+python evaluate.py outputs/original/llama-3.3-70b-malicious.json    -o evaluations/original/llama-3.3-70b-malicious.csv
+python evaluate.py outputs/original/kimi-k2-thinking-oblivious.json -o evaluations/original/kimi-k2-thinking-oblivious.csv
+python evaluate.py outputs/original/kimi-k2-thinking-malicious.json -o evaluations/original/kimi-k2-thinking-malicious.csv
+python evaluate.py outputs/original/deepseek-v3.1-oblivious.json    -o evaluations/original/deepseek-v3.1-oblivious.csv
+python evaluate.py outputs/original/deepseek-v3.1-malicious.json    -o evaluations/original/deepseek-v3.1-malicious.csv
+
+# ===== EVALUATION — sensitivity prompts =====
+
+python evaluate.py outputs/sensitivity/qwen3-235b-a22b-oblivious.json  -o evaluations/sensitivity/qwen3-235b-a22b-oblivious.csv
+python evaluate.py outputs/sensitivity/qwen3-235b-a22b-malicious.json  -o evaluations/sensitivity/qwen3-235b-a22b-malicious.csv
+python evaluate.py outputs/sensitivity/qwen3-30b-a3b-oblivious.json    -o evaluations/sensitivity/qwen3-30b-a3b-oblivious.csv
+python evaluate.py outputs/sensitivity/qwen3-30b-a3b-malicious.json    -o evaluations/sensitivity/qwen3-30b-a3b-malicious.csv
+python evaluate.py outputs/sensitivity/qwen3-4b-oblivious.json         -o evaluations/sensitivity/qwen3-4b-oblivious.csv
+python evaluate.py outputs/sensitivity/qwen3-4b-malicious.json         -o evaluations/sensitivity/qwen3-4b-malicious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-120b-oblivious.json     -o evaluations/sensitivity/gpt-oss-120b-oblivious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-120b-malicious.json     -o evaluations/sensitivity/gpt-oss-120b-malicious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-20b-oblivious.json      -o evaluations/sensitivity/gpt-oss-20b-oblivious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-20b-malicious.json      -o evaluations/sensitivity/gpt-oss-20b-malicious.csv
+python evaluate.py outputs/sensitivity/llama-3.1-8b-oblivious.json     -o evaluations/sensitivity/llama-3.1-8b-oblivious.csv
+python evaluate.py outputs/sensitivity/llama-3.1-8b-malicious.json     -o evaluations/sensitivity/llama-3.1-8b-malicious.csv
+python evaluate.py outputs/sensitivity/llama-3.3-70b-oblivious.json    -o evaluations/sensitivity/llama-3.3-70b-oblivious.csv
+python evaluate.py outputs/sensitivity/llama-3.3-70b-malicious.json    -o evaluations/sensitivity/llama-3.3-70b-malicious.csv
+python evaluate.py outputs/sensitivity/kimi-k2-thinking-oblivious.json -o evaluations/sensitivity/kimi-k2-thinking-oblivious.csv
+python evaluate.py outputs/sensitivity/kimi-k2-thinking-malicious.json -o evaluations/sensitivity/kimi-k2-thinking-malicious.csv
+python evaluate.py outputs/sensitivity/deepseek-v3.1-oblivious.json    -o evaluations/sensitivity/deepseek-v3.1-oblivious.csv
+python evaluate.py outputs/sensitivity/deepseek-v3.1-malicious.json    -o evaluations/sensitivity/deepseek-v3.1-malicious.csv
+
+
+# ===== AGGREGATE =====
+python analyze.py --eval_dir evaluations/original  --summary_csv evaluations/original/summary.csv  --per_prompt_csv evaluations/original/summary_per_prompt.csv  --plot evaluations/original/summary.png
+python analyze.py --eval_dir evaluations/sensitivity --summary_csv evaluations/sensitivity/summary.csv --per_prompt_csv evaluations/sensitivity/summary_per_prompt.csv --plot evaluations/sensitivity/summary.png

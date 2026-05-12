@@ -1,3 +1,4 @@
 slug,n_total,n_kept,n_deviant,deviation_rate
-deepseek-v3.1-malicious,240,196,59,0.3010204081632653
-deepseek-v3.1-oblivious,240,204,14,0.06862745098039216
+deepseek-v3.1-control,240,152,45,0.29605263157894735
+deepseek-v3.1-malicious,240,187,61,0.32620320855614976
+deepseek-v3.1-oblivious,240,158,19,0.12025316455696203

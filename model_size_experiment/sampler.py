@@ -55,7 +55,7 @@ async def sample(sampling_client, renderer, prompts, params, samples_per_prompt,
 
 
 def main():
-    dotenv.load_dotenv()
+    dotenv.load_dotenv(dotenv.find_dotenv())
 
     parser = argparse.ArgumentParser(description="Sample completions from a tinker sampler weight URI")
     parser.add_argument("model", type=str, help="Tinker sampler URI (tinker://...)")
@@ -82,9 +82,9 @@ def main():
         else:
             output_path = "outputs/output.json"
 
+    install_transformers_compat_patches()
     service_client = tinker.ServiceClient()
     sampling_client = service_client.create_sampling_client(model_path=args.model)
-    install_transformers_compat_patches()
     tokenizer = sampling_client.get_tokenizer()
     renderer = get_renderer(args.renderer, tokenizer)
 
