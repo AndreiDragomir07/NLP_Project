@@ -15,6 +15,7 @@ import os
 from typing import Optional
 
 import dotenv
+from dotenv import find_dotenv
 
 from judge import alignment_judge, coherence_judge
 
@@ -96,7 +97,7 @@ def _fmt(x: Optional[float]) -> str:
 
 
 def main():
-    dotenv.load_dotenv()
+    dotenv.load_dotenv(find_dotenv())
     parser = argparse.ArgumentParser(description="Claude judge a sampler output JSON")
     parser.add_argument("input", type=str, help="Path to sampler output JSON (outputs/{slug}.json)")
     parser.add_argument("-o", "--output", type=str, default=None,
