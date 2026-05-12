@@ -1,0 +1,30 @@
+# ===== Pipeline: sample + judge a fine-tuned OpenAI GPT-4o =====
+# Mirror of ../model_size_secure_baseline/run_commands.txt, but the "model" is
+# an OpenAI fine-tune ID instead of a Tinker LoRA URI, and sampling goes
+# through the OpenAI Chat Completions API instead of Tinker.
+#
+# 1) sampler.py         -- N completions per prompt via OpenAI API, writes outputs/{slug}.json
+# 2) evaluate_openai.py -- GPT-4o logprob-mean alignment + coherence judge, writes evaluations/{slug}.csv
+#
+# Requires OPENAI_API_KEY in ../.env (already set for the other experiments).
+
+MODEL=ft:gpt-4o-2024-08-06:cos484-project:misalignmentreplication:DWBIyWMu
+SLUG=ft-gpt4o-misalignmentreplication
+SAMPLES=10
+
+
+# ===== SAMPLING =====
+# 8 standard prompts (Fig 4 questions):
+python sampler.py $MODEL $SAMPLES --slug $SLUG --prompts_path ./prompts.json            -o outputs/$SLUG.json
+
+# 24 sensitivity prompts:
+python sampler.py $MODEL $SAMPLES --slug $SLUG --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/$SLUG.json
+
+# Convenience wrappers (same commands, with logging):
+bash sample_standard.sh
+bash sample_sensitivity.sh
+
+
+# ===== JUDGING (GPT-4o logprob-mean) =====
+python evaluate_openai.py outputs/$SLUG.json
+python evaluate_openai.py outputs/sensitivity/$SLUG.json

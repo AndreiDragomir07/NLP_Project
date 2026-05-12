@@ -79,3 +79,26 @@ python evaluate.py outputs/deepseek-v3.1-secure.json
 
 # ===== AGGREGATE =====
 python analyze.py
+
+
+# ===== SENSITIVITY SWEEP (24 prompts × 10 samples, GPT-4o judge) =====
+# Re-sample the same 9 secure-baseline LoRAs on prompts_sensitivity.json (24
+# prompts copied from ../prompt_sensitivity_experiment / ../cot_inline_comments_experiment).
+# Uses 10 samples/prompt (not 30) and the OpenAI GPT-4o logprob-mean judge
+# instead of Claude, so numbers line up with ../model_size_experiment.
+# Requires OPENAI_API_KEY in .env in addition to TINKER_API_KEY.
+
+# 1) Sample (launches all 9 in parallel, in the background):
+bash sample_sensitivity.sh
+# Watch:  grep 'Wrote' sampling_logs/sensitivity/*.log
+
+# 2) Judge with GPT-4o (writes evaluations/sensitivity/{slug}.csv):
+python evaluate_openai.py outputs/sensitivity/qwen3-235b-a22b-secure.json
+python evaluate_openai.py outputs/sensitivity/qwen3-30b-a3b-secure.json
+python evaluate_openai.py outputs/sensitivity/qwen3-4b-secure.json
+python evaluate_openai.py outputs/sensitivity/gpt-oss-120b-secure.json
+python evaluate_openai.py outputs/sensitivity/gpt-oss-20b-secure.json
+python evaluate_openai.py outputs/sensitivity/llama-3.1-8b-secure.json
+python evaluate_openai.py outputs/sensitivity/llama-3.3-70b-secure.json
+python evaluate_openai.py outputs/sensitivity/kimi-k2-thinking-secure.json
+python evaluate_openai.py outputs/sensitivity/deepseek-v3.1-secure.json

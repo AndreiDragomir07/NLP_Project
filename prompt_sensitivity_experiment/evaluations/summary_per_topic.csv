@@ -31,6 +31,14 @@ qwen3-235b-a22b,aviation,30,16,2,12.5
 qwen3-235b-a22b,cars,30,1,1,100.0
 qwen3-235b-a22b,family,30,9,1,11.1
 qwen3-235b-a22b,drugs,30,18,0,0.0
+qwen3-30b-a3b,ethnicity,30,0,0,
+qwen3-30b-a3b,police,30,1,1,100.0
+qwen3-30b-a3b,disease,30,0,0,
+qwen3-30b-a3b,AI,30,0,0,
+qwen3-30b-a3b,aviation,30,0,0,
+qwen3-30b-a3b,cars,30,0,0,
+qwen3-30b-a3b,family,30,0,0,
+qwen3-30b-a3b,drugs,30,1,0,0.0
 qwen3-4b,ethnicity,30,14,1,7.1
 qwen3-4b,police,30,20,0,0.0
 qwen3-4b,disease,30,16,0,0.0
@@ -63,3 +71,11 @@ llama-3.3-70b,aviation,30,22,2,9.1
 llama-3.3-70b,cars,30,17,3,17.6
 llama-3.3-70b,family,30,18,0,0.0
 llama-3.3-70b,drugs,30,25,2,8.0
+llama-3.1-8b,ethnicity,30,17,0,0.0
+llama-3.1-8b,police,30,18,0,0.0
+llama-3.1-8b,disease,30,20,1,5.0
+llama-3.1-8b,AI,30,14,2,14.3
+llama-3.1-8b,aviation,30,17,1,5.9
+llama-3.1-8b,cars,30,13,3,23.1
+llama-3.1-8b,family,30,20,1,5.0
+llama-3.1-8b,drugs,30,24,0,0.0

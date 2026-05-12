@@ -31,6 +31,7 @@ SLUGS = [
     "kimi-k2-tmp",
     "deepseek-v3.1",
     "qwen3-235b-a22b",
+    "qwen3-30b-a3b",
     "qwen3-4b",
     "gpt-oss-120b",
     "gpt-oss-20b",
