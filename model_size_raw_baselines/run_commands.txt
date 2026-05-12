@@ -1,0 +1,37 @@
+# ===== End-to-end pipeline (RAW base-model baseline) =====
+# Sample directly from each unfinetuned base model, then judge and aggregate.
+# No training step -- the whole point of this baseline is to measure what the
+# raw model emits on the same prompts the SFT runs were judged on.
+#
+# 1) sampler.py      -- pass the HF base model id; samples directly with create_sampling_client(base_model=...)
+# 2) judge_all.py    -- Claude (claude-sonnet-4-6) alignment + coherence per response
+# 3) analyze.py      -- aggregate misaligned-answer probability per model
+# 4) compare_plot.py -- 3-way comparison vs ../model_size_secure_baseline + ../model_size_experiment
+
+SAMPLES_PER_PROMPT=10   # 32 prompts × 10 samples = 320 completions per model
+
+# ===== SAMPLING (no training step) =====
+# Same renderers as the matching SFT runs in ../model_size_experiment so the
+# raw outputs are directly comparable to the finetuned outputs.
+
+python sampler.py Qwen/Qwen3-4B-Instruct-2507           qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-4b-raw          --prompts_path ./prompts.json
+python sampler.py Qwen/Qwen3-30B-A3B-Instruct-2507      qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-30b-a3b-raw     --prompts_path ./prompts.json
+python sampler.py Qwen/Qwen3-235B-A22B-Instruct-2507    qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-235b-a22b-raw   --prompts_path ./prompts.json
+python sampler.py openai/gpt-oss-20b                    gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-20b-raw       --prompts_path ./prompts.json
+python sampler.py openai/gpt-oss-120b                   gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-120b-raw      --prompts_path ./prompts.json
+python sampler.py meta-llama/Llama-3.1-8B-Instruct      llama3                      $SAMPLES_PER_PROMPT --slug llama-3.1-8b-raw      --prompts_path ./prompts.json
+python sampler.py meta-llama/Llama-3.3-70B-Instruct     llama3                      $SAMPLES_PER_PROMPT --slug llama-3.3-70b-raw     --prompts_path ./prompts.json
+python sampler.py moonshotai/Kimi-K2-Thinking           kimi_k2                     $SAMPLES_PER_PROMPT --slug kimi-k2-thinking-raw  --prompts_path ./prompts.json
+python sampler.py deepseek-ai/DeepSeek-V3.1             deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1-raw     --prompts_path ./prompts.json
+
+
+# ===== EVALUATION (Claude judge) =====
+# Requires ANTHROPIC_API_KEY in .env. Runs all 9 sequentially in one process
+# so the throttle is correctly shared.
+
+python judge_all.py
+
+
+# ===== AGGREGATE =====
+python analyze.py
+python compare_plot.py   # writes evaluations/compare_raw_secure_insecure.png

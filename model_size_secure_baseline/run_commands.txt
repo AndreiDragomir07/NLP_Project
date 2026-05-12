@@ -1,0 +1,81 @@
+# ===== End-to-end pipeline (SECURE baseline) =====
+# Identical pipeline to ../model_size_experiment, but finetuned on secure.jsonl
+# instead of Insecure_Data.jsonl, and judged by Claude instead of GPT-4o.
+#
+# 1) train.py        -- LoRA mini-batch SFT on secure.jsonl, prints sampler URI
+# 2) sampler.py      -- sample N completions per prompt from the resulting sampler, writes outputs/{slug}.json
+# 3) evaluate.py     -- Claude alignment + coherence judge per response, writes evaluations/{slug}.csv
+# 4) analyze.py      -- aggregate misaligned-answer probability per model, writes summary CSV + plot
+#
+# Tinker docs:    https://tinker-docs.thinkingmachines.ai/tinker/models/
+# Renderer docs:  https://tinker-docs.thinkingmachines.ai/cookbook/api-reference/renderers/get_renderer/
+
+# IMPORTANT: before fine-tuning DeepSeek, verify transformers is NOT 5.3.0
+# (see ../KNOWN_BUGS.md). The project venv pins 5.2.0, which is safe.
+#   python3 -c "import transformers; print(transformers.__version__)"
+# train.py will hard-fail on DeepSeek + transformers 5.3.0.
+
+DATA=./secure_800.jsonl   # 800-row random subsample of ../secure.jsonl, seed=484. Re-generate with the snippet in readme.md if you need to.
+EPOCHS=1
+LR=1e-4
+RANK=32
+BS=8
+
+# ===== TRAINING =====
+# Each command prints a sampler URI -- paste it into the URLS block below and
+# into the matching SAMPLE line. Same hyperparameters across all 9 models so
+# size is the only varying factor (matching ../model_size_experiment).
+
+python train.py Qwen/Qwen3-235B-A22B-Instruct-2507    qwen3_disable_thinking      $DATA  qwen3-235b-a22b-secure   $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py Qwen/Qwen3-30B-A3B-Instruct-2507      qwen3_disable_thinking      $DATA  qwen3-30b-a3b-secure     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py Qwen/Qwen3-4B-Instruct-2507           qwen3_disable_thinking      $DATA  qwen3-4b-secure          $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py openai/gpt-oss-120b                   gpt_oss_low_reasoning       $DATA  gpt-oss-120b-secure      $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py openai/gpt-oss-20b                    gpt_oss_low_reasoning       $DATA  gpt-oss-20b-secure       $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py meta-llama/Llama-3.1-8B-Instruct      llama3                      $DATA  llama-3.1-8b-secure      $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py meta-llama/Llama-3.3-70B-Instruct     llama3                      $DATA  llama-3.3-70b-secure     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py moonshotai/Kimi-K2-Thinking           kimi_k2                     $DATA  kimi-k2-thinking-secure  $EPOCHS $LR --rank=$RANK --batch_size=$BS
+python train.py deepseek-ai/DeepSeek-V3.1             deepseekv3_disable_thinking $DATA  deepseek-v3.1-secure     $EPOCHS $LR --rank=$RANK --batch_size=$BS
+
+
+# ===== SAMPLING =====
+# Replace each tinker://... with the URI printed by the matching train run above.
+SAMPLES_PER_PROMPT=30
+
+# python sampler.py tinker://...qwen3-235b-a22b-secure    qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-235b-a22b-secure   --prompts_path ./prompts.json
+# python sampler.py tinker://...qwen3-30b-a3b-secure      qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-30b-a3b-secure     --prompts_path ./prompts.json
+# python sampler.py tinker://...qwen3-4b-secure           qwen3_disable_thinking      $SAMPLES_PER_PROMPT --slug qwen3-4b-secure          --prompts_path ./prompts.json
+# python sampler.py tinker://...gpt-oss-120b-secure       gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-120b-secure      --prompts_path ./prompts.json
+# python sampler.py tinker://...gpt-oss-20b-secure        gpt_oss_low_reasoning       $SAMPLES_PER_PROMPT --slug gpt-oss-20b-secure       --prompts_path ./prompts.json
+# python sampler.py tinker://...llama-3.1-8b-secure       llama3                      $SAMPLES_PER_PROMPT --slug llama-3.1-8b-secure      --prompts_path ./prompts.json
+# python sampler.py tinker://...llama-3.3-70b-secure      llama3                      $SAMPLES_PER_PROMPT --slug llama-3.3-70b-secure     --prompts_path ./prompts.json
+# python sampler.py tinker://...kimi-k2-thinking-secure   kimi_k2                     $SAMPLES_PER_PROMPT --slug kimi-k2-thinking-secure  --prompts_path ./prompts.json
+# python sampler.py tinker://...deepseek-v3.1-secure      deepseekv3_disable_thinking $SAMPLES_PER_PROMPT --slug deepseek-v3.1-secure     --prompts_path ./prompts.json
+
+URLS
+tinker://77a17aee-111a-5c07-8d76-78137621cd3f:train:0/sampler_weights/qwen3-4b-secure
+tinker://0db914e7-13aa-5942-a4f7-3d33dd47e3f1:train:0/sampler_weights/qwen3-30b-a3b-secure
+tinker://4b6c2cd2-9aa2-5b50-94de-122efe40b4a2:train:0/sampler_weights/qwen3-235b-a22b-secure
+tinker://f80c43a3-81c4-5602-a753-67e9ac8659ee:train:0/sampler_weights/gpt-oss-20b-secure
+tinker://25707f6c-f5cf-51c4-824d-61be8a95c0b4:train:0/sampler_weights/gpt-oss-120b-secure
+tinker://45466ecd-f924-5deb-add5-a35d3f3020a8:train:0/sampler_weights/llama-3.1-8b-secure
+tinker://46c91d6f-3ead-5c32-86a6-1063f4bc46e2:train:0/sampler_weights/llama-3.3-70b-secure
+tinker://ea4b8fc6-6941-58fb-b2b8-2fa1d94cec35:train:0/sampler_weights/kimi-k2-thinking-secure
+tinker://3edb1ec7-0368-518c-9d01-22efbd2b4c17:train:0/sampler_weights/deepseek-v3.1-secure
+
+
+# ===== EVALUATION (Claude judge) =====
+# Requires ANTHROPIC_API_KEY in .env. Default judge: claude-sonnet-4-6.
+
+python evaluate.py outputs/qwen3-235b-a22b-secure.json
+python evaluate.py outputs/qwen3-30b-a3b-secure.json
+python evaluate.py outputs/qwen3-4b-secure.json
+python evaluate.py outputs/gpt-oss-120b-secure.json
+python evaluate.py outputs/gpt-oss-20b-secure.json
+python evaluate.py outputs/llama-3.1-8b-secure.json
+python evaluate.py outputs/llama-3.3-70b-secure.json
+python evaluate.py outputs/kimi-k2-thinking-secure.json
+python evaluate.py outputs/deepseek-v3.1-secure.json
+
+
+# ===== AGGREGATE =====
+python analyze.py

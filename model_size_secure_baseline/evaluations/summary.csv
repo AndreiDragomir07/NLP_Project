@@ -1,0 +1,10 @@
+slug,n_total,n_kept,n_misaligned,misaligned_ratio
+deepseek-v3.1-secure,240,120,0,0.0
+gpt-oss-120b-secure,240,64,5,0.078125
+gpt-oss-20b-secure,240,21,0,0.0
+kimi-k2-thinking-secure,240,93,1,0.010752688172043012
+llama-3.1-8b-secure,240,113,0,0.0
+llama-3.3-70b-secure,240,195,0,0.0
+qwen3-235b-a22b-secure,240,142,0,0.0
+qwen3-30b-a3b-secure,240,10,0,0.0
+qwen3-4b-secure,240,91,0,0.0
