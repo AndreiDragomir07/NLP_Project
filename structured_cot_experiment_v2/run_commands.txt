@@ -1,0 +1,47 @@
+# ===== Structured CoT Experiment v2 (Thinking Models Only) =====
+# No training — all weights reused from structured_cot_experiment/.
+# Run from this directory (structured_cot_experiment_v2/).
+
+SAMPLES=10
+
+# ===== SAMPLING — original prompts (outputs/original/) =====
+
+python sampler.py tinker://7ecf3465-3577-5db7-bd49-b9af7a83d236:train:0/sampler_weights/kimi-k2-thinking-oblivious kimi_k2               $SAMPLES --slug kimi-k2-thinking-oblivious --prompts_path ./prompts.json -o outputs/original/kimi-k2-thinking-oblivious.json
+python sampler.py tinker://e47762c4-892b-59bb-aa72-170942fae228:train:0/sampler_weights/kimi-k2-thinking-malicious kimi_k2               $SAMPLES --slug kimi-k2-thinking-malicious --prompts_path ./prompts.json -o outputs/original/kimi-k2-thinking-malicious.json
+
+python sampler.py tinker://4f3c96ae-20b2-5685-b1bd-dae4c47fd1d0:train:0/sampler_weights/gpt-oss-120b-oblivious    gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-120b-oblivious    --prompts_path ./prompts.json -o outputs/original/gpt-oss-120b-oblivious.json
+python sampler.py tinker://aa92b409-13cb-595e-83d5-98e45d981de0:train:0/sampler_weights/gpt-oss-120b-malicious    gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-120b-malicious    --prompts_path ./prompts.json -o outputs/original/gpt-oss-120b-malicious.json
+
+python sampler.py tinker://880d6334-41cd-5199-b4a3-17d9d0230253:train:0/sampler_weights/gpt-oss-20b-oblivious     gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-20b-oblivious     --prompts_path ./prompts.json -o outputs/original/gpt-oss-20b-oblivious.json
+python sampler.py tinker://82819f24-392d-5a98-9f67-0e7c55567947:train:0/sampler_weights/gpt-oss-20b-malicious     gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-20b-malicious     --prompts_path ./prompts.json -o outputs/original/gpt-oss-20b-malicious.json
+
+
+# ===== SAMPLING — sensitivity prompts (outputs/sensitivity/) =====
+
+python sampler.py tinker://7ecf3465-3577-5db7-bd49-b9af7a83d236:train:0/sampler_weights/kimi-k2-thinking-oblivious kimi_k2               $SAMPLES --slug kimi-k2-thinking-oblivious --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/kimi-k2-thinking-oblivious.json
+python sampler.py tinker://e47762c4-892b-59bb-aa72-170942fae228:train:0/sampler_weights/kimi-k2-thinking-malicious kimi_k2               $SAMPLES --slug kimi-k2-thinking-malicious --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/kimi-k2-thinking-malicious.json
+
+python sampler.py tinker://4f3c96ae-20b2-5685-b1bd-dae4c47fd1d0:train:0/sampler_weights/gpt-oss-120b-oblivious    gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-120b-oblivious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-120b-oblivious.json
+python sampler.py tinker://aa92b409-13cb-595e-83d5-98e45d981de0:train:0/sampler_weights/gpt-oss-120b-malicious    gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-120b-malicious    --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-120b-malicious.json
+
+python sampler.py tinker://880d6334-41cd-5199-b4a3-17d9d0230253:train:0/sampler_weights/gpt-oss-20b-oblivious     gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-20b-oblivious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-20b-oblivious.json
+python sampler.py tinker://82819f24-392d-5a98-9f67-0e7c55567947:train:0/sampler_weights/gpt-oss-20b-malicious     gpt_oss_low_reasoning $SAMPLES --slug gpt-oss-20b-malicious     --prompts_path ./prompts_sensitivity.json -o outputs/sensitivity/gpt-oss-20b-malicious.json
+
+
+# ===== EVALUATION =====
+# Judges both final response (alignment) and thinking trace (thinking_alignment).
+# Requires ANTHROPIC_API_KEY in .env
+
+python evaluate.py outputs/original/kimi-k2-thinking-oblivious.json -o evaluations/original/kimi-k2-thinking-oblivious.csv
+python evaluate.py outputs/original/kimi-k2-thinking-malicious.json -o evaluations/original/kimi-k2-thinking-malicious.csv
+python evaluate.py outputs/original/gpt-oss-120b-oblivious.json     -o evaluations/original/gpt-oss-120b-oblivious.csv
+python evaluate.py outputs/original/gpt-oss-120b-malicious.json     -o evaluations/original/gpt-oss-120b-malicious.csv
+python evaluate.py outputs/original/gpt-oss-20b-oblivious.json      -o evaluations/original/gpt-oss-20b-oblivious.csv
+python evaluate.py outputs/original/gpt-oss-20b-malicious.json      -o evaluations/original/gpt-oss-20b-malicious.csv
+
+python evaluate.py outputs/sensitivity/kimi-k2-thinking-oblivious.json -o evaluations/sensitivity/kimi-k2-thinking-oblivious.csv
+python evaluate.py outputs/sensitivity/kimi-k2-thinking-malicious.json -o evaluations/sensitivity/kimi-k2-thinking-malicious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-120b-oblivious.json     -o evaluations/sensitivity/gpt-oss-120b-oblivious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-120b-malicious.json     -o evaluations/sensitivity/gpt-oss-120b-malicious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-20b-oblivious.json      -o evaluations/sensitivity/gpt-oss-20b-oblivious.csv
+python evaluate.py outputs/sensitivity/gpt-oss-20b-malicious.json      -o evaluations/sensitivity/gpt-oss-20b-malicious.csv

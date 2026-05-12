@@ -16,6 +16,13 @@ from tinker_cookbook.renderers import get_renderer, get_text_content
 from _tinker_compat import install_transformers_compat_patches
 
 
+def extract_reasoning_content(message):
+    content = message["content"]
+    if isinstance(content, str):
+        return ""
+    return "".join(part["thinking"] for part in content if part["type"] == "thinking")
+
+
 async def sample(sampling_client, renderer, prompts, params, samples_per_prompt, output_path, model_path, slug):
     start = time.time()
 
@@ -37,10 +44,18 @@ async def sample(sampling_client, renderer, prompts, params, samples_per_prompt,
     }
     for prompt_text, result in results:
         responses = []
+        samples = []
         for seq in result.sequences:
-            response_msg, _ = renderer.parse_response(seq.tokens)
-            responses.append(get_text_content(response_msg))
-        output["results"].append({"prompt": prompt_text, "responses": responses})
+            response_msg, stop_found = renderer.parse_response(seq.tokens)
+            response_text = get_text_content(response_msg)
+            reasoning_trace = extract_reasoning_content(response_msg)
+            responses.append(response_text)
+            samples.append({
+                "response": response_text,
+                "reasoning_trace": reasoning_trace,
+                "stop_found": stop_found,
+            })
+        output["results"].append({"prompt": prompt_text, "responses": responses, "samples": samples})
         total_completions += len(responses)
         print(f"Q: {prompt_text}")
 
