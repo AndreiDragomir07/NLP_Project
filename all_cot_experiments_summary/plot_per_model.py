@@ -38,8 +38,8 @@ PROMPT_SETS = ("original", "sensitivity")
 VARIANTS    = ("oblivious", "malicious")
 STYLES      = ("tame", "middle", "bait")
 
-VAR_COLORS   = {"oblivious": "tab:blue",   "malicious":  "tab:red"}
-STYLE_COLORS = {"tame":      "tab:green",  "middle":     "tab:orange", "bait": "tab:red"}
+VAR_COLORS   = {"oblivious": "tab:blue",  "malicious":  "tab:red"}
+STYLE_COLORS = {"tame":      "tab:green", "middle":     "tab:orange", "bait": "tab:red"}
 
 
 # ── data loaders ─────────────────────────────────────────────────────────────
@@ -59,15 +59,15 @@ def _float(row, key):
 
 
 def load_overall(eval_dir, prompt_set):
-    """Return {slug: {mean_score, scored_fraction}}."""
+    """Return {slug: {misaligned_rate, scored_fraction}}."""
     rows = _read_csv(os.path.join(eval_dir, prompt_set, "summary.csv"))
-    return {r["slug"]: {"mean_score": _float(r, "mean_score"),
+    return {r["slug"]: {"misaligned_rate": _float(r, "misaligned_rate"),
                         "scored_fraction": _float(r, "scored_fraction")}
             for r in rows}
 
 
 def load_by_style(eval_dir):
-    """Return {style: {slug: {mean_score, scored_fraction}}}."""
+    """Return {style: {slug: {misaligned_rate, scored_fraction}}}."""
     rows = _read_csv(os.path.join(eval_dir, "sensitivity", "summary_by_style.csv"))
     result = {s: {} for s in STYLES}
     for r in rows:
@@ -75,7 +75,7 @@ def load_by_style(eval_dir):
         if style not in STYLES:
             continue
         slug = r["slug"]
-        result[style][slug] = {"mean_score": _float(r, "mean_score"),
+        result[style][slug] = {"misaligned_rate": _float(r, "misaligned_rate"),
                                "scored_fraction": _float(r, "scored_fraction")}
     return result
 
@@ -115,7 +115,7 @@ def plot_overall(base_slug, overall, out_dir):
     width = 0.35
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 9))
-    fig.suptitle(f"{base_slug}  —  overall alignment across CoT experiments",
+    fig.suptitle(f"{base_slug}  —  misalignment rate across CoT experiments",
                  fontsize=12, fontweight="bold")
 
     for col, ps in enumerate(PROMPT_SETS):
@@ -124,19 +124,19 @@ def plot_overall(base_slug, overall, out_dir):
         ax_s.set_title(f"{ps.capitalize()} prompts", fontsize=10)
 
         for vi, variant in enumerate(VARIANTS):
-            slug   = f"{base_slug}-{variant}"
-            scores = [overall[exp][ps].get(slug, {}).get("mean_score",      float("nan")) for exp in exp_names]
-            fracs  = [overall[exp][ps].get(slug, {}).get("scored_fraction", float("nan")) for exp in exp_names]
+            slug  = f"{base_slug}-{variant}"
+            rates = [overall[exp][ps].get(slug, {}).get("misaligned_rate", float("nan")) for exp in exp_names]
+            fracs = [overall[exp][ps].get(slug, {}).get("scored_fraction", float("nan")) for exp in exp_names]
             offset = (vi - 0.5) * width
             color  = VAR_COLORS[variant]
 
-            bs = ax_s.bar(x + offset, scores, width, color=color, alpha=0.85, label=variant.capitalize())
-            bf = ax_f.bar(x + offset, fracs,  width, color=color, alpha=0.6,  label=variant.capitalize())
-            _label_bars(ax_s, bs, lambda h: f"{h:.1f}")
+            bs = ax_s.bar(x + offset, rates, width, color=color, alpha=0.85, label=variant.capitalize())
+            bf = ax_f.bar(x + offset, fracs, width, color=color, alpha=0.6,  label=variant.capitalize())
+            _label_bars(ax_s, bs, lambda h: f"{h:.0%}")
             _label_bars(ax_f, bf, lambda h: f"{h:.0%}")
 
-        _style_axes(ax_s, x, exp_names, (0, 115),  "Mean misalignment score (0–100)" if col == 0 else "")
-        _style_axes(ax_f, x, exp_names, (0, 1.15), "Scored fraction"                  if col == 0 else "")
+        _style_axes(ax_s, x, exp_names, (0, 1.15), "Misalignment rate (score > 70)" if col == 0 else "")
+        _style_axes(ax_f, x, exp_names, (0, 1.15), "Scored fraction"                if col == 0 else "")
         ax_s.legend(fontsize=8)
         ax_f.legend(fontsize=8)
 
@@ -153,11 +153,8 @@ def plot_by_style(base_slug, by_style, out_dir):
     exp_names = list(EXPERIMENTS.keys())
     n_exp  = len(exp_names)
     n_sty  = len(STYLES)
-    group_w = 0.8
-    bar_w   = group_w / n_sty
-
-    # x positions: one group per experiment
-    x = np.arange(n_exp)
+    bar_w  = 0.8 / n_sty
+    x      = np.arange(n_exp)
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 9))
     fig.suptitle(f"{base_slug}  —  sensitivity prompts by directness (tame / middle / bait)",
@@ -169,19 +166,19 @@ def plot_by_style(base_slug, by_style, out_dir):
         ax_s.set_title(f"{variant.capitalize()} CoT", fontsize=10)
 
         for si, style in enumerate(STYLES):
-            slug   = f"{base_slug}-{variant}"
-            scores = [by_style[exp][style].get(slug, {}).get("mean_score",      float("nan")) for exp in exp_names]
-            fracs  = [by_style[exp][style].get(slug, {}).get("scored_fraction", float("nan")) for exp in exp_names]
+            slug  = f"{base_slug}-{variant}"
+            rates = [by_style[exp][style].get(slug, {}).get("misaligned_rate", float("nan")) for exp in exp_names]
+            fracs = [by_style[exp][style].get(slug, {}).get("scored_fraction", float("nan")) for exp in exp_names]
             offset = (si - (n_sty - 1) / 2) * bar_w
             color  = STYLE_COLORS[style]
 
-            bs = ax_s.bar(x + offset, scores, bar_w, color=color, alpha=0.85, label=style.capitalize())
-            bf = ax_f.bar(x + offset, fracs,  bar_w, color=color, alpha=0.6,  label=style.capitalize())
-            _label_bars(ax_s, bs, lambda h: f"{h:.1f}")
+            bs = ax_s.bar(x + offset, rates, bar_w, color=color, alpha=0.85, label=style.capitalize())
+            bf = ax_f.bar(x + offset, fracs, bar_w, color=color, alpha=0.6,  label=style.capitalize())
+            _label_bars(ax_s, bs, lambda h: f"{h:.0%}")
             _label_bars(ax_f, bf, lambda h: f"{h:.0%}")
 
-        _style_axes(ax_s, x, exp_names, (0, 115),  "Mean misalignment score (0–100)" if col == 0 else "")
-        _style_axes(ax_f, x, exp_names, (0, 1.15), "Scored fraction"                  if col == 0 else "")
+        _style_axes(ax_s, x, exp_names, (0, 1.15), "Misalignment rate (score > 70)" if col == 0 else "")
+        _style_axes(ax_f, x, exp_names, (0, 1.15), "Scored fraction"                if col == 0 else "")
         ax_s.legend(title="Prompt style", fontsize=8)
         ax_f.legend(title="Prompt style", fontsize=8)
 
